@@ -41,3 +41,9 @@ test('suppression au-delà de 24 heures seulement (hors formateur)', () => {
   assert.match(room['.write'], /now - 86400000/);
   assert.match(game.expiry.$code['.write'], /now - 86400000/);
 });
+
+test('la pioche est vérifiée contre la main du joueur actif', () => {
+  assert.ok(room.meta.hands.$uid.$i, 'mains par participant');
+  assert.equal(room.meta.deckOrder, undefined, 'plus de paquet commun');
+  assert.match(room.turn.cardId['.validate'], /meta\/hands'\)\.child\(data\.parent\(\)\.child\('playerUid'\)/);
+});

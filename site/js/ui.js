@@ -3,7 +3,7 @@
 
 import {
   MAX_PLAYERS, TIMER_CHOICES, REGION_LABELS, VERDICT_LABELS, frenchTypography, explanationFor, normalizeCode,
-  isValidCode, maxCardsPerPlayer, clampCardsPerPlayer, nextPlayer, playedCounts, resultList, secondsLeft,
+  isValidCode, deckStats, maxCardsPerPlayer, clampCardsPerPlayer, nextPlayer, playedCounts, resultList, secondsLeft,
   teamScore, playerScores, podium, mistakes, formatPercent, asList,
 } from './game-core.js?v=__VERSION__';
 import { createVenn } from './venn.js?v=__VERSION__';
@@ -82,6 +82,7 @@ function formatSeconds(total) {
 export async function startApp(gameStore, { deck }) {
   const cardsById = Object.fromEntries(deck.cards.map((card) => [card.id, card]));
   const cardIds = deck.cards.map((card) => card.id);
+  const stats = deckStats(deck.cards);   // taille du paquet et nombre de pièges
   const params = new URLSearchParams(location.search);
   let code = isValidCode(normalizeCode(params.get('salle'))) ? normalizeCode(params.get('salle')) : null;
   let room = null;
@@ -335,13 +336,13 @@ export async function startApp(gameStore, { deck }) {
     $('lobby-players').replaceChildren(...players.map(([id, p]) => playerItem(id, p, { removable: true })));
     $('lobby-empty').hidden = players.length > 0;
 
-    const max = maxCardsPerPlayer(cardIds.length, players.length);
-    const value = effectiveCardsPerPlayer(room, cardIds.length);
+    const max = maxCardsPerPlayer(stats, players.length);
+    const value = effectiveCardsPerPlayer(room, stats);
     const input = $('cards-value');
     input.max = String(Math.max(max, 1));
     input.disabled = !players.length;
     if (document.activeElement !== input) input.value = players.length ? String(value) : '';
-    $('cards-hint').textContent = players.length ? `Maximum ${max} (${cardIds.length} cartes pour ${players.length} participant${players.length > 1 ? 's' : ''})` : `${cardIds.length} cartes dans le paquet`;
+    $('cards-hint').textContent = players.length ? `Maximum ${max}` : `${cardIds.length} cartes dans le paquet`;
     $('cards-minus').disabled = !players.length || value <= 1;
     $('cards-plus').disabled = !players.length || value >= max;
 
@@ -365,8 +366,8 @@ export async function startApp(gameStore, { deck }) {
 
   function changeCards(delta) {
     const players = activePlayers(room).length;
-    const max = maxCardsPerPlayer(cardIds.length, players);
-    const next = clampCardsPerPlayer(effectiveCardsPerPlayer(room, cardIds.length) + delta, max);
+    const max = maxCardsPerPlayer(stats, players);
+    const next = clampCardsPerPlayer(effectiveCardsPerPlayer(room, stats) + delta, max);
     gameStore.setCardsPerPlayer(code, next);
   }
   $('cards-minus').addEventListener('click', () => changeCards(-1));
@@ -376,11 +377,11 @@ export async function startApp(gameStore, { deck }) {
   function commitCardsInput() {
     if (!room?.meta) return;
     const input = $('cards-value');
-    const max = maxCardsPerPlayer(cardIds.length, activePlayers(room).length);
+    const max = maxCardsPerPlayer(stats, activePlayers(room).length);
     if (!max) return;
-    const next = clampCardsPerPlayer(input.value.trim() === '' ? effectiveCardsPerPlayer(room, cardIds.length) : input.value, max);
+    const next = clampCardsPerPlayer(input.value.trim() === '' ? effectiveCardsPerPlayer(room, stats) : input.value, max);
     input.value = String(next);
-    if (next !== effectiveCardsPerPlayer(room, cardIds.length) || room.meta.cardsPerPlayer !== next) gameStore.setCardsPerPlayer(code, next);
+    if (next !== effectiveCardsPerPlayer(room, stats) || room.meta.cardsPerPlayer !== next) gameStore.setCardsPerPlayer(code, next);
   }
   $('cards-value').addEventListener('change', commitCardsInput);
   $('cards-value').addEventListener('keydown', (event) => {
@@ -391,7 +392,7 @@ export async function startApp(gameStore, { deck }) {
     if (busy || !room) return;
     busy = true;
     $('launch').disabled = true;
-    try { await gameStore.launch(code, room, cardIds); } finally { busy = false; }
+    try { await gameStore.launch(code, room, deck.cards); } finally { busy = false; }
   });
 
   async function deleteRoom() {

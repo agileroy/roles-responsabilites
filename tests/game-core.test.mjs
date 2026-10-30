@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   REGIONS, verdict, explanationFor, frenchTypography, validateDeck, validateName, normalizeName, nameKey,
-  generateCode, isValidCode, normalizeCode, maxCardsPerPlayer, clampCardsPerPlayer, shuffle, asList,
+  generateCode, isValidCode, normalizeCode, maxCardsPerPlayer, deckStats, dealHands, undealtCards, clampCardsPerPlayer, shuffle, asList,
   nextPlayer, lateQuota, playedCounts, secondsLeft, teamScore, playerScores, podium, mistakes, formatPercent,
 } from '../site/js/game-core.js';
 
@@ -124,18 +124,21 @@ test('code de salle : 4 lettres sans lettres ambiguës', () => {
 // ---------------------------------------------------------------- Réglages
 
 test('maximum de cartes par personne', () => {
-  assert.equal(maxCardsPerPlayer(67, 10), 6);
-  assert.equal(maxCardsPerPlayer(67, 8), 8);
-  assert.equal(maxCardsPerPlayer(67, 7), 9);
+  const deck = { total: 67, traps: 16 };
+  assert.equal(maxCardsPerPlayer(deck, 10), 6);
+  assert.equal(maxCardsPerPlayer(deck, 8), 7);
+  assert.equal(maxCardsPerPlayer(deck, 7), 8);
+  assert.equal(maxCardsPerPlayer(deck, 4), 13);   // assez de cartes non piège pour compléter les mains
+  assert.equal(maxCardsPerPlayer({ total: 20, traps: 2 }, 3), 1);  // pas assez de pièges : 1 carte chacun
 });
 
 test('réglage : 5 par défaut, ramené dans [1, maximum]', () => {
-  assert.equal(clampCardsPerPlayer(null, maxCardsPerPlayer(67, 4)), 5);
-  assert.equal(clampCardsPerPlayer(undefined, maxCardsPerPlayer(67, 10)), 5);
+  assert.equal(clampCardsPerPlayer(null, maxCardsPerPlayer({ total: 67, traps: 16 }, 4)), 5);
+  assert.equal(clampCardsPerPlayer(undefined, maxCardsPerPlayer({ total: 67, traps: 16 }, 10)), 5);
   assert.equal(clampCardsPerPlayer(null, 3), 3);              // maximum plus petit que 5
-  assert.equal(clampCardsPerPlayer(9, maxCardsPerPlayer(67, 8)), 8);
-  assert.equal(clampCardsPerPlayer('12', 16), 12);            // saisie au clavier
-  assert.equal(clampCardsPerPlayer('40', 16), 16);
+  assert.equal(clampCardsPerPlayer(8, maxCardsPerPlayer({ total: 67, traps: 16 }, 8)), 7);
+  assert.equal(clampCardsPerPlayer('12', 13), 12);            // saisie au clavier
+  assert.equal(clampCardsPerPlayer('40', 13), 13);
   assert.equal(clampCardsPerPlayer('0', 16), 1);
   assert.equal(clampCardsPerPlayer('abc', 16), 5);
 });
@@ -190,16 +193,74 @@ test('joueur absent : après « Passer son tour », il garde ses cartes et rejou
 test('retardataire : autant de cartes qu\'il en reste aux autres', () => {
   const p = players(5);
   const twoRounds = res('julie', 'marc', 'ines', 'julie', 'marc', 'ines');
-  assert.equal(lateQuota({ players: p, results: twoRounds, deckSize: 67, cardsPerPlayer: 5 }), 3);
+  assert.equal(lateQuota({ players: p, results: twoRounds, available: 47, cardsPerPlayer: 5 }), 3);
   // Tour en cours : Inès n'a pas encore joué son 3e carte ; il en reste 3 au moins avancé.
   const mid = res('julie', 'marc', 'ines', 'julie', 'marc', 'ines', 'julie', 'marc');
-  assert.equal(lateQuota({ players: p, results: mid, deckSize: 67, cardsPerPlayer: 5 }), 3);
+  assert.equal(lateQuota({ players: p, results: mid, available: 47, cardsPerPlayer: 5 }), 3);
 });
 
-test('retardataire : limité par les cartes restantes du paquet, spectateur s\'il n\'en reste pas', () => {
+test('retardataire : limité par les cartes non distribuées, spectateur s\'il n\'en reste pas', () => {
   const p = players(6);
-  assert.equal(lateQuota({ players: p, results: {}, deckSize: 20, cardsPerPlayer: 6 }), 2);
-  assert.equal(lateQuota({ players: p, results: {}, deckSize: 18, cardsPerPlayer: 6 }), 0);
+  assert.equal(lateQuota({ players: p, results: {}, available: 2, cardsPerPlayer: 6 }), 2);
+  assert.equal(lateQuota({ players: p, results: {}, available: 0, cardsPerPlayer: 6 }), 0);
+});
+
+// ---------------------------------------------------------------- Mains
+
+const fakeDeck = [
+  ...Array.from({ length: 16 }, (_, i) => ({ id: `trap-${i}`, answer: 'trap' })),
+  ...Array.from({ length: 51 }, (_, i) => ({ id: `card-${i}`, answer: ['po', 'sm', 'dev', 'team'][i % 4] })),
+];
+const isTrap = (id) => id.startsWith('trap');
+
+test('mains : exactement 1 piège par main dès 2 cartes, toutes les cartes différentes', () => {
+  const uids = ['julie', 'marc', 'ines', 'paul'];
+  for (let round = 0; round < 50; round += 1) {
+    const hands = dealHands(fakeDeck, uids, 5);
+    const all = Object.values(hands).flat();
+    assert.equal(all.length, 20);
+    assert.equal(new Set(all).size, 20);
+    for (const uid of uids) {
+      assert.equal(hands[uid].length, 5);
+      assert.equal(hands[uid].filter(isTrap).length, 1, uid);
+    }
+  }
+});
+
+test('mains : le piège apparaît à chaque rang', () => {
+  const seen = new Set();
+  for (let round = 0; round < 200; round += 1) {
+    for (const hand of Object.values(dealHands(fakeDeck, ['a', 'b', 'c', 'd'], 5))) seen.add(hand.findIndex(isTrap));
+  }
+  assert.deepEqual([...seen].sort(), [0, 1, 2, 3, 4]);
+});
+
+test('mains : avec 1 carte par personne, tirage dans tout le paquet', () => {
+  let traps = 0;
+  for (let round = 0; round < 300; round += 1) {
+    const hands = dealHands(fakeDeck, ['a', 'b', 'c'], 1);
+    for (const hand of Object.values(hands)) { assert.equal(hand.length, 1); traps += isTrap(hand[0]) ? 1 : 0; }
+  }
+  assert.ok(traps > 0 && traps < 900, 'des pièges et des cartes non piège');
+});
+
+test('mains : un retardataire est servi avec les cartes non distribuées, complétées si besoin', () => {
+  const hands = dealHands(fakeDeck, ['a', 'b'], 5);
+  const rest = undealtCards(fakeDeck, hands);
+  assert.equal(rest.length, 57);
+  const late = dealHands(rest, ['late'], 3).late;
+  assert.equal(late.filter(isTrap).length, 1);
+  assert.ok(late.every((id) => !Object.values(hands).flat().includes(id)));
+  // Plus aucun piège disponible : la main est complétée avec les autres cartes.
+  const noTrap = dealHands(fakeDeck.filter((c) => !isTrap(c.id)), ['x'], 3).x;
+  assert.equal(noTrap.length, 3);
+  // Plus assez de cartes non piège : la main est complétée avec des pièges.
+  const fewOthers = dealHands([...fakeDeck.slice(0, 4), fakeDeck[20]], ['y'], 3).y;
+  assert.equal(fewOthers.length, 3);
+});
+
+test('statistiques du paquet', () => {
+  assert.deepEqual(deckStats(fakeDeck), { total: 67, traps: 16 });
 });
 
 test('chrono : secondes restantes', () => {

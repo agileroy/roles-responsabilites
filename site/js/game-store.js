@@ -5,7 +5,8 @@
 import {
   MAX_PLAYERS, ROOM_TTL_MS, TIMER_CHOICES, TIMER_GRACE_MS, generateCode, isValidCode, normalizeCode, normalizeName,
   validateName, nameKey, shuffle, asList, nextPlayer, lateQuota, maxCardsPerPlayer, clampCardsPerPlayer, verdict,
-  resultList, isRegion,
+  dealHands, undealtCards, playedCounts,
+  resultList, isRegion, deckStats,
 } from './game-core.js?v=__VERSION__';
 
 export const ROOT = 'rolesGame';
@@ -21,8 +22,8 @@ export function isConnected(player) {
 }
 
 /** Nombre de cartes par personne effectivement appliqué (réglage, ou 5 par défaut, dans la limite du maximum). */
-export function effectiveCardsPerPlayer(room, deckSize) {
-  const max = maxCardsPerPlayer(deckSize, activePlayers(room).length);
+export function effectiveCardsPerPlayer(room, stats) {
+  const max = maxCardsPerPlayer(stats, activePlayers(room).length);
   return clampCardsPerPlayer(room?.meta?.cardsPerPlayer ?? null, max);
 }
 
@@ -91,16 +92,16 @@ export function createGameStore(db, { random = cryptoRandom } = {}) {
       return db.set(`${roomPath(code)}/meta/timerSeconds`, seconds);
     },
 
-    /** Lance la partie : paquet mélangé, ordre de passage tiré au sort, quotas, premier tour. */
-    async launch(code, room, cardIds) {
+    /** Lance la partie : ordre de passage tiré au sort, une main par participant (1 piège par main), premier tour. */
+    async launch(code, room, cards) {
       const players = activePlayers(room).map(([uid]) => uid);
       if (!players.length) return false;
-      const perPlayer = effectiveCardsPerPlayer(room, cardIds.length);
+      const perPlayer = effectiveCardsPerPlayer(room, deckStats(cards));
       const order = shuffle(players, random);
       const patch = {
         'meta/status': 'playing',
         'meta/cardsPerPlayer': perPlayer,
-        'meta/deckOrder': shuffle(cardIds, random),
+        'meta/hands': dealHands(cards, order, perPlayer, random),
         'meta/playerOrder': order,
         'meta/startedAt': db.TIMESTAMP,
         turn: { seq: 0, playerUid: order[0], deckIndex: '0' },
@@ -110,20 +111,23 @@ export function createGameStore(db, { random = cryptoRandom } = {}) {
       return true;
     },
 
-    /** Donne un nombre de cartes au retardataire et l'ajoute à la fin de l'ordre de passage. */
-    async admitLatePlayer(code, room, uid) {
-      const quota = lateQuota({
-        players: room.players, results: room.results,
-        deckSize: asList(room.meta.deckOrder).length, cardsPerPlayer: room.meta.cardsPerPlayer,
+    /** Donne une main au retardataire (1 piège dès 2 cartes) et l'ajoute à la fin de l'ordre de passage. */
+    async admitLatePlayer(code, room, uid, cards) {
+      const available = undealtCards(cards, room.meta.hands);
+      const wanted = lateQuota({
+        players: room.players, results: room.results, available: available.length, cardsPerPlayer: room.meta.cardsPerPlayer,
       });
+      const hand = dealHands(available, [uid], wanted, random)[uid];
+      const quota = hand.length;
       const order = asList(room.meta.playerOrder);
       const patch = { [`players/${uid}/quota`]: quota };
+      if (quota > 0) patch[`meta/hands/${uid}`] = hand;
       if (quota > 0 && !order.includes(uid)) patch['meta/playerOrder'] = [...order, uid];
       await db.update(roomPath(code), patch);
       // Partie déjà finie faute de joueur : le retardataire relance le tour.
       if (quota > 0 && room.turn?.done) {
         await db.set(`${roomPath(code)}/turn`, {
-          seq: (room.turn.seq ?? 0) + 1, playerUid: uid, deckIndex: String(resultList(room.results).length),
+          seq: (room.turn.seq ?? 0) + 1, playerUid: uid, deckIndex: '0',
         });
       }
     },
@@ -154,10 +158,11 @@ export function createGameStore(db, { random = cryptoRandom } = {}) {
         await db.set(`${roomPath(code)}/turn`, { seq: (turn.seq ?? 0) + 1, done: true });
         return null;
       }
-      // Passer son tour : la carte piochée n'est pas comptée et retourne dans le paquet.
+      // Passer son tour : la carte piochée n'est pas comptée et reste dans la main du joueur,
+      // qui la retrouvera à son prochain tour (l'indice de pioche est le nombre de cartes qu'il a jouées).
       void skip;
       await db.set(`${roomPath(code)}/turn`, {
-        seq: (turn.seq ?? 0) + 1, playerUid: next, deckIndex: String(resultList(results).length),
+        seq: (turn.seq ?? 0) + 1, playerUid: next, deckIndex: String(playedCounts(results)[next] ?? 0),
       });
       return next;
     },
@@ -218,7 +223,7 @@ export function createGameStore(db, { random = cryptoRandom } = {}) {
     async draw(code, room) {
       const turn = room.turn;
       if (!turn || turn.playerUid !== db.uid || turn.cardId) return false;
-      const cardId = asList(room.meta.deckOrder)[Number(turn.deckIndex)];
+      const cardId = asList(room.meta.hands?.[db.uid])[Number(turn.deckIndex)];
       if (!cardId) return false;
       await db.update(`${roomPath(code)}/turn`, { cardId, drawnAt: db.TIMESTAMP });
       return true;
@@ -264,7 +269,7 @@ export function hostReactions(store, code, room, cardsById, inFlight = new Set()
       if (turn.placement || expired) run(`reveal-${turn.seq}`, () => store.revealTurn(code, room, cardsById));
     }
     for (const [uid, player] of activePlayers(room)) {
-      if (player.quota === undefined || player.quota === null) run(`admit-${uid}`, () => store.admitLatePlayer(code, room, uid));
+      if (player.quota === undefined || player.quota === null) run(`admit-${uid}`, () => store.admitLatePlayer(code, room, uid, Object.values(cardsById)));
     }
   }
 }

@@ -353,9 +353,11 @@
             "timerSeconds": {
               ".validate": "newData.isNumber() && (newData.val() === 0 || newData.val() === 30 || newData.val() === 45 || newData.val() === 60)"
             },
-            "deckOrder": {
-              "$i": {
-                ".validate": "$i.matches(/^[0-9]{1,3}$/) && newData.isString() && newData.val().matches(/^[a-z0-9-]{1,20}$/)"
+            "hands": {
+              "$uid": {
+                "$i": {
+                  ".validate": "$i.matches(/^[0-9]{1,3}$/) && newData.isString() && newData.val().matches(/^[a-z0-9-]{1,20}$/)"
+                }
               }
             },
             "playerOrder": {
@@ -425,7 +427,7 @@
             },
             "cardId": {
               ".write": "auth != null && auth.uid === data.parent().child('playerUid').val() && !data.exists() && root.child('rolesGame/rooms/' + $code + '/meta/status').val() === 'playing'",
-              ".validate": "newData.isString() && newData.val() === root.child('rolesGame/rooms/' + $code + '/meta/deckOrder').child(data.parent().child('deckIndex').val()).val()"
+              ".validate": "newData.isString() && newData.val() === root.child('rolesGame/rooms/' + $code + '/meta/hands').child(data.parent().child('playerUid').val()).child(data.parent().child('deckIndex').val()).val()"
             },
             "drawnAt": {
               ".write": "auth != null && auth.uid === data.parent().child('playerUid').val() && !data.exists()",

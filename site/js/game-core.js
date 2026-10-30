@@ -130,10 +130,23 @@ export function generateCode(random = Math.random) {
 
 // ---------------------------------------------------------------- Réglages et tirage
 
-/** Nombre maximum de cartes par personne : paquet divisé par le nombre de participants. */
-export function maxCardsPerPlayer(deckSize, playerCount) {
-  if (playerCount <= 0) return Math.max(0, deckSize);
-  return Math.floor(deckSize / playerCount);
+/** Taille du paquet et nombre de pièges. */
+export function deckStats(cards) {
+  return { total: cards.length, traps: cards.filter((card) => card.answer === 'trap').length };
+}
+
+/**
+ * Nombre maximum de cartes par personne : le plus grand k tel que les mains puissent être distribuées,
+ * avec exactement 1 piège par main dès 2 cartes (assez de pièges et assez de cartes non piège).
+ */
+export function maxCardsPerPlayer({ total, traps }, playerCount) {
+  if (playerCount <= 0) return Math.max(0, total);
+  let max = Math.floor(total / playerCount);
+  if (max >= 2) {
+    if (playerCount > traps) return 1;
+    max = Math.min(max, 1 + Math.floor((total - traps) / playerCount));
+  }
+  return max;
 }
 
 /** Ramène un réglage dans les bornes [1, maximum] ; une valeur illisible donne la valeur par défaut. */
@@ -152,6 +165,38 @@ export function shuffle(items, random = Math.random) {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+/**
+ * Mains des participants : dès 2 cartes, exactement 1 piège par main et le reste en cartes non piège,
+ * dans un ordre mélangé ; avec 1 carte, une carte tirée au hasard dans tout le paquet. Toutes les cartes
+ * distribuées sont différentes. Si les pièges ou les autres cartes manquent (retardataire en fin de paquet),
+ * la main est complétée avec les cartes restantes. Renvoie { uid: [identifiants] }.
+ */
+export function dealHands(cards, uids, perPlayer, random = Math.random) {
+  const hands = {};
+  if (perPlayer <= 0) { for (const uid of uids) hands[uid] = []; return hands; }
+  if (perPlayer === 1) {
+    const pool = shuffle(cards.map((card) => card.id), random);
+    for (const uid of uids) hands[uid] = pool.length ? [pool.pop()] : [];
+    return hands;
+  }
+  const traps = shuffle(cards.filter((card) => card.answer === 'trap').map((card) => card.id), random);
+  const others = shuffle(cards.filter((card) => card.answer !== 'trap').map((card) => card.id), random);
+  for (const uid of uids) {
+    const hand = [];
+    if (traps.length) hand.push(traps.pop());
+    while (hand.length < perPlayer && others.length) hand.push(others.pop());
+    while (hand.length < perPlayer && traps.length) hand.push(traps.pop());
+    hands[uid] = shuffle(hand, random);
+  }
+  return hands;
+}
+
+/** Cartes qui ne sont dans aucune main. */
+export function undealtCards(cards, hands) {
+  const dealt = new Set(Object.values(hands ?? {}).flatMap((hand) => asList(hand)));
+  return cards.filter((card) => !dealt.has(card.id));
 }
 
 /** Firebase stocke les listes comme des objets à clés numériques : on les remet en tableau. */
@@ -212,9 +257,9 @@ export function nextPlayer({ order, players, results, currentUid = null }) {
 
 /**
  * Nombre de cartes d'un retardataire : ce qu'il reste à jouer au participant le moins avancé
- * (réglage moins les tours complets déjà joués), limité par les cartes restantes du paquet.
+ * (réglage moins les tours complets déjà joués), limité par les cartes encore non distribuées (`available`).
  */
-export function lateQuota({ players, results, deckSize, cardsPerPlayer }) {
+export function lateQuota({ players, results, available, cardsPerPlayer }) {
   const played = playedCounts(results);
   let remainingOthers = 0;
   for (const [uid, player] of Object.entries(players ?? {})) {
@@ -222,9 +267,7 @@ export function lateQuota({ players, results, deckSize, cardsPerPlayer }) {
     remainingOthers = Math.max(remainingOthers, (player.quota ?? 0) - (played[uid] ?? 0));
   }
   remainingOthers = Math.min(remainingOthers, cardsPerPlayer);
-  const drawn = resultList(results).length;
-  const free = deckSize - drawn - remainingCards(players, played);
-  return Math.max(0, Math.min(remainingOthers, free));
+  return Math.max(0, Math.min(remainingOthers, available));
 }
 
 /** Temps restant du chrono, en secondes entières (null sans chrono ou avant la pioche). */

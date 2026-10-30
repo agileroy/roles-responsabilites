@@ -44,7 +44,7 @@ Une carte non placée à la fin du chrono SHALL avoir le verdict « Faux ».
 - **THEN** le verdict est « Faux »
 
 #### Scenario: Responsabilité réelle mise au piège
-- **GIVEN** la carte « Annuler le Sprint si le Sprint Goal devient obsolète », bonne région Product Owner
+- **GIVEN** la carte « Annuler le Sprint si l'Objectif de Sprint devient obsolète », bonne région Product Owner
 - **WHEN** le joueur la place dans la zone Piège
 - **THEN** le verdict est « Faux »
 

@@ -6,7 +6,9 @@ context: |
   Jeu de formation PSM / PSPO « Rôles et responsabilités » : les participants placent des cartes de
   responsabilités dans un diagramme de Venn (Product Owner, Scrum Master, Developers, intersections,
   centre = Scrum Team) ou dans une zone « Piège » pour les responsabilités qui n'existent pas dans Scrum.
-  Vocabulaire du Scrum Guide 2020 : « accountabilities », Product Owner, Scrum Master, Developers, Scrum Team.
+  Vocabulaire de la traduction française officielle du Scrum Guide 2020 (novembre 2020) : redevable,
+  Product Owner, Scrum Master, Developers, Scrum Team, Objectif de Produit, Objectif de Sprint,
+  Definition of Done, affinement du Product Backlog.
   Chaque explication de carte s'appuie sur le Scrum Guide 2020 ; le paquet de cartes est un fichier JSON
   du dépôt (site/data/cards.json), relu et validé par l'auteur.
   Déroulé collectif en temps réel : un formateur (qui ne joue pas) anime depuis un écran projeté ;

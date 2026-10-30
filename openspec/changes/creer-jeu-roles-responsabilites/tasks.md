@@ -1,7 +1,7 @@
 ## 1. Paquet de cartes
 
 - [x] 1.1 Rédiger `site/data/cards.json` (régions, cartes, explications, explications ciblées) et `tools/cards-review.mjs`, qui génère `docs/cartes.md`. Vérification : le script génère la vue sans erreur.
-- [ ] 1.2 Intégrer les relectures (fait : 66 cartes après arbitrage) (fidélité au Scrum Guide 2020, clarté et jouabilité) et faire valider le paquet par l'auteur. Vérification : validation explicite de l'auteur.
+- [ ] 1.2 Intégrer les relectures (fidélité au Scrum Guide 2020, clarté et jouabilité, puis relecture sur la traduction française officielle : 67 cartes) et faire valider le paquet par l'auteur. Vérification : validation explicite de l'auteur.
 - [ ] 1.3 Écrire `tests/cards.test.mjs` : identifiants uniques, régions connues, textes et explications non vides, pas d'explication ciblée pour la bonne région. Vérification : `npm test` au vert, et un test rouge sur un paquet volontairement cassé.
 
 ## 2. Logique métier pure

@@ -1,6 +1,6 @@
 ## Why
 
-En formation PSM et PSPO, les confusions sur les accountabilities de Scrum sont toujours les mêmes : qui ordonne le Product Backlog, qui estime, qui définit le Sprint Goal, qui « assigne les tâches »… L'atelier papier « Rôles et responsabilités » fonctionne, mais la correction est longue et dépend du formateur. Un jeu collectif en temps réel, projeté et joué depuis les téléphones, rend l'atelier plus rythmé, corrige chaque carte à chaud en s'appuyant sur le Scrum Guide 2020 et engage chaque participant à tour de rôle.
+En formation PSM et PSPO, les confusions sur les accountabilities de Scrum sont toujours les mêmes : qui ordonne le Product Backlog, qui estime, qui définit l'Objectif de Sprint, qui « assigne les tâches »… L'atelier papier « Rôles et responsabilités » fonctionne, mais la correction est longue et dépend du formateur. Un jeu collectif en temps réel, projeté et joué depuis les téléphones, rend l'atelier plus rythmé, corrige chaque carte à chaud en s'appuyant sur le Scrum Guide 2020 et engage chaque participant à tour de rôle.
 
 ## What Changes
 
@@ -11,7 +11,7 @@ En formation PSM et PSPO, les confusions sur les accountabilities de Scrum sont 
 - **Correction immédiate** pour toute la salle : juste, partiel ou faux, avec une explication fondée sur le Scrum Guide 2020, ciblée selon l'erreur commise. Le formateur passe à la carte suivante quand la discussion est terminée.
 - **Arrivée tardive** possible : le retardataire pioche autant de cartes qu'il en reste aux autres participants.
 - **Fin de partie** : score collectif, podium des trois meilleurs pourcentages de bonnes réponses, récapitulatif des erreurs avec leurs explications.
-- **Paquet de 66 cartes** dans un fichier JSON du dépôt (`site/data/cards.json`), relu et validé par l'auteur.
+- **Paquet de 67 cartes** dans un fichier JSON du dépôt (`site/data/cards.json`), relu et validé par l'auteur.
 - Les salles sont **supprimées au bout de 24 heures**, sans serveur.
 - Site statique sur GitHub Pages ; l'état partagé passe par la base Firebase existante de l'auteur, dans une nouvelle branche `rolesGame`.
 - La **boîte à outils** (https://agileroy.github.io/outils/) reçoit un encart « En formation » avec la carte du jeu.

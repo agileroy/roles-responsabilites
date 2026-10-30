@@ -19,13 +19,15 @@ Dépôt neuf, sur le modèle de `poker-planning` : site statique vanilla en modu
 
 - **Structure du site** : `site/index.html`, `site/app.css`, `site/data/cards.json`, `site/vendor/` (QR code), et dans `site/js/` :
   - `game-core.js` : logique pure (régions et ensembles d'accountabilities, verdict, choix de l'explication, validation du paquet, maximum de cartes par personne, ordre de passage, joueur suivant, quota d'un retardataire, scores, podium, récapitulatif, génération et validation du code de salle, normalisation du prénom) ;
-  - `room-store.js` : seul module qui parle à Firebase ;
+  - `game-store.js` : actions de la partie (formateur et participants) et réactions automatiques du navigateur du formateur (révéler une carte, admettre un retardataire), écrites sur une petite interface de base de données ;
+  - `firebase-db.js` : seul module qui parle à Firebase, implémentation de cette interface ;
+  - `memory-db.js` : la même interface en mémoire, pour les tests de parcours (`tests/game-store.test.mjs`, plusieurs clients sur un même serveur) et pour un **mode démo** (`?demo` dans l'adresse : les onglets d'un même navigateur partagent la partie par `localStorage`, sans Firebase), utile pour essayer le jeu seul ;
   - `ui.js` : interface, avec trois vues (formateur, joueur actif, spectateur) ; `app.js` : point d'entrée et routage par `?salle=` ;
   - `venn.js` : dessin SVG du diagramme et détection de la région touchée ;
   - `firebase-config.js` : configuration publique, identique à celle de `poker-planning` (même projet).
   Les modules `theme.js` et le générateur de QR code `qrcode-generator` 1.4.4 sont repris de `poker-planning`.
 
-- **Diagramme de Venn en SVG** : trois cercles de même rayon disposés en triangle dans un rectangle « Scrum Team », zone « Piège » en bandeau sous le rectangle. Chaque région est un chemin SVG distinct (calculé par intersections de cercles à l'aide de `clipPath` et de masques), ce qui donne une cible tactile par région et permet de la colorer ; la région PO + SM, géométriquement petite, garde une zone tactile d'au moins 44 px grâce au rayon choisi. Alternative écartée : boutons de régions sous un Venn décoratif, moins parlant pour le débrief.
+- **Diagramme de Venn en SVG** : trois cercles de rayon 170 (repère 640 × 660) disposés en triangle, zone « Piège » en bandeau sous les cercles. Pas de cadre « Scrum Team » autour des cercles, décidé pendant l'implémentation : il faisait doublon avec le centre, qui porte ce nom. Chaque région est dessinée par intersection de `clipPath` et exclusion par masque, pour la colorer ; la région touchée est calculée géométriquement à partir du point (appartenance aux cercles), car les masques n'arrêtent pas les clics. Chaque région est aussi focalisable au clavier (Entrée ou Espace). Écartement choisi pour que la plus petite région (PO + SM) garde un cercle inscrit de 108 unités, soit environ 55 px sur un téléphone de 360 px. Alternative écartée : boutons de régions sous un Venn décoratif, moins parlant pour le débrief.
 
 - **Régions et verdict** : chaque région est associée à un ensemble (`po` → {PO}, `po-dev` → {PO, Dev}, `team` → {PO, SM, Dev}, `trap` → {}). Le verdict compare les ensembles : égalité → juste ; intersection non vide → partiel ; sinon faux. La zone Piège, ensemble vide, donne donc « faux » face à toute autre région. Cette règle unique couvre aussi le centre : « PO » pour une carte « Scrum Team » est partiel.
 
@@ -33,15 +35,15 @@ Dépôt neuf, sur le modèle de `poker-planning` : site statique vanilla en modu
   - `rooms/{code}/meta` : `{ hostUid, createdAt, status: 'lobby' | 'playing' | 'finished', cardsPerPlayer, timerSeconds, deckOrder, playerOrder }`. `deckOrder` est la liste mélangée des identifiants de cartes, `playerOrder` la liste des `uid` dans l'ordre de passage, tous deux écrits par le formateur au lancement (les retardataires sont ajoutés à la fin de `playerOrder`) ;
   - `rooms/{code}/players/{uid}` : `{ name, joinedAt, quota, removed, connections: { {connId}: true } }` ; `quota` est le nombre de cartes à jouer, fixé par le formateur au lancement ou à l'arrivée tardive ;
   - `rooms/{code}/names/{cléNormalisée}` : `uid`, pour l'unicité du prénom ;
-  - `rooms/{code}/turn` : `{ seq, playerUid, cardId, drawnAt, selection, placement, timedOut, revealed }` ; `seq` numérote les tours ;
-  - `rooms/{code}/results/{seq}` : `{ playerUid, cardId, region, verdict }`, écrit par le formateur à la révélation ;
-  - `expiry/{code}` : `createdAt`, index lisible par tous les connectés, pour le ménage.
+  - `rooms/{code}/turn` : `{ seq, playerUid, deckIndex, cardId, drawnAt, selection, placement, placedAt, revealed, done }` ; `seq` numérote les tours ; `deckIndex` (chaîne, pour que les règles puissent l'utiliser comme clé de `deckOrder`) est le nombre de cartes déjà jouées ; `done` marque un tour sans joueur (toutes les cartes jouées) ;
+  - `rooms/{code}/results/{seq}` : `{ playerUid, cardId, region, verdict, timedOut }`, écrit par le formateur à la révélation (`region` absente si le temps est écoulé) ;
+  - `expiry/{code}` : `{ createdAt, hostUid }`, index lisible par tous les connectés, qui réserve le code et sert au ménage ; la création de `meta` exige d'en être le `hostUid`.
 
 - **Rôles et autorité** : le formateur est identifié par `meta.hostUid` (authentification anonyme, `uid` stable par navigateur). Lui seul écrit `meta`, `turn` (sauf `selection` et `placement`), `results` et le `quota` ou `removed` des joueurs. Le joueur désigné par `turn.playerUid` est le seul à pouvoir écrire `turn.cardId` à la pioche (valeur imposée : la carte suivante de `deckOrder`, vérifiable par les règles via un index `turn.deckIndex`), `turn.selection` tant que `placement` est vide, puis `turn.placement` une seule fois. Les régions sont validées par une expression régulière dans les règles.
 
 - **Calcul du verdict par le formateur** : quand `turn.placement` apparaît (ou que le chrono expire), le navigateur du formateur calcule le verdict avec `game-core.js`, écrit `results/{seq}` et passe `turn.revealed` à vrai ; tous les écrans affichent alors la correction à partir du paquet local et du résultat. Un seul écrivain évite les conflits. Conséquence : la correction n'apparaît que si l'écran du formateur est ouvert, ce qui est le cas en formation.
 
-- **Chrono** : `turn.drawnAt` est l'heure du serveur à la pioche (`serverTimestamp`). Chaque écran affiche le temps restant avec `.info/serverTimeOffset`. À l'échéance, le navigateur du formateur écrit le résultat « faux, temps écoulé » ; les règles refusent un `placement` écrit après `drawnAt + timerSeconds`, avec une marge de 2 secondes.
+- **Chrono** : `turn.drawnAt` est l'heure du serveur à la pioche (`serverTimestamp`). Chaque écran affiche le temps restant avec `.info/serverTimeOffset`. Les règles refusent un `placement` écrit après `drawnAt + timerSeconds`, avec une marge de 2 secondes (latence) ; le navigateur du formateur attend la fin de cette marge pour écrire le résultat « faux, temps écoulé », ce qui évite qu'un placement accepté arrive après la correction.
 
 - **Passage au joueur suivant** : `game-core.js` calcule le prochain joueur à partir de `playerOrder`, des quotas, des cartes déjà jouées par chacun (comptées dans `results`) et des joueurs retirés. La partie est terminée quand plus aucun joueur non retiré n'a de carte à jouer. « Passer son tour » remet le joueur à la fin du tour complet en cours sans consommer de carte : la carte piochée n'est pas comptée et l'index du paquet n'avance pas.
 
@@ -51,7 +53,7 @@ Dépôt neuf, sur le modèle de `poker-planning` : site statique vanilla en modu
 
 - **Ménage des salles de plus de 24 heures** : à la création d'une salle, le navigateur du formateur lit `expiry` et supprime `rooms/{code}` et `expiry/{code}` pour chaque salle dont `createdAt` dépasse 24 heures (constante `ROOM_TTL_MS`). Les règles n'autorisent cette suppression que si `createdAt < now − 86 400 000`, ou si l'auteur de la suppression est le formateur de la salle.
 
-- **Code de salle** : 4 lettres tirées dans un alphabet sans lettres ambiguës (`ABCDEFGHJKMNPQRSTUVWXYZ`), réservé par transaction sur `expiry/{code}` ; en cas de collision, un nouveau tirage.
+- **Code de salle** : 4 lettres tirées dans un alphabet sans lettres ambiguës (`ABCDEFGHJKMNPQRSTUVWXYZ`), réservé par une écriture sur `expiry/{code}` que les règles refusent si le code existe déjà ; en cas de refus, un nouveau tirage.
 
 - **Hasard** : `crypto.getRandomValues` pour le mélange (Fisher-Yates), l'ordre de passage et le code. `game-core.js` reçoit la fonction aléatoire en paramètre pour être testable.
 

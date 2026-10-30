@@ -1,0 +1,10 @@
+{
+  "name": "roles-responsabilites",
+  "private": true,
+  "type": "module",
+  "description": "Jeu de formation PSM / PSPO : les rôles et responsabilités de Scrum, en temps réel",
+  "scripts": {
+    "test": "node --test",
+    "cartes": "node tools/cards-review.mjs"
+  }
+}

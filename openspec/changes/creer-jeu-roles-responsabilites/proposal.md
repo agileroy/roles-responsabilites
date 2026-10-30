@@ -1,6 +1,6 @@
 ## Why
 
-En formation PSM et PSPO, les confusions sur les accountabilities de Scrum sont toujours les mêmes : qui ordonne le Product Backlog, qui estime, qui définit l'Objectif de Sprint, qui « assigne les tâches »… L'atelier papier « Rôles et responsabilités » fonctionne, mais la correction est longue et dépend du formateur. Un jeu collectif en temps réel, projeté et joué depuis les téléphones, rend l'atelier plus rythmé, corrige chaque carte à chaud en s'appuyant sur le Scrum Guide 2020 et engage chaque participant à tour de rôle.
+En formation PSM et PSPO, les confusions sur les accountabilities de Scrum sont toujours les mêmes : qui ordonne le Product Backlog, qui estime, qui définit le Sprint Goal, qui « assigne les tâches »… L'atelier papier « Rôles et responsabilités » fonctionne, mais la correction est longue et dépend du formateur. Un jeu collectif en temps réel, projeté et joué depuis les téléphones, rend l'atelier plus rythmé, corrige chaque carte à chaud en s'appuyant sur le Scrum Guide 2020 et engage chaque participant à tour de rôle.
 
 ## What Changes
 

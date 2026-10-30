@@ -1,12 +1,12 @@
 ## ADDED Requirements
 
 ### Requirement: Régions du diagramme de Venn
-Le jeu SHALL proposer huit régions : trois cercles qui se chevauchent, « Product Owner », « Scrum Master » et « Developers », dans un cadre « Scrum Team », ce qui donne les régions Product Owner seul, Scrum Master seul, Developers seuls, Product Owner + Scrum Master, Product Owner + Developers, Scrum Master + Developers et le centre « Scrum Team » ; et, en dehors du cadre, une zone « Piège ». Chaque région SHALL correspondre à un ensemble d'accountabilities : la région Product Owner + Developers à {Product Owner, Developers}, le centre à {Product Owner, Scrum Master, Developers}, la zone Piège à l'ensemble vide. Le vocabulaire SHALL être celui du Scrum Guide 2020.
+Le jeu SHALL proposer huit régions : trois cercles qui se chevauchent, « Product Owner », « Scrum Master » et « Developers », ce qui donne les régions Product Owner seul, Scrum Master seul, Developers seuls, Product Owner + Scrum Master, Product Owner + Developers, Scrum Master + Developers et le centre « Scrum Team » ; et, à part, sous les cercles, une zone « Piège ». Chaque région SHALL correspondre à un ensemble d'accountabilities : la région Product Owner + Developers à {Product Owner, Developers}, le centre à {Product Owner, Scrum Master, Developers}, la zone Piège à l'ensemble vide. Le vocabulaire SHALL être celui du Scrum Guide 2020.
 
 #### Scenario: Plateau affiché
 - **GIVEN** une partie en cours
 - **WHEN** le plateau s'affiche
-- **THEN** on voit les trois cercles nommés, leurs intersections, le cadre « Scrum Team » et la zone « Piège » à l'extérieur
+- **THEN** on voit les trois cercles nommés, leurs intersections, le centre « Scrum Team » et la zone « Piège » sous les cercles
 
 ### Requirement: Paquet de cartes
 Le paquet SHALL être un fichier JSON du site (`site/data/cards.json`). Chaque carte SHALL avoir un identifiant unique, un texte, une bonne région, une explication générale fondée sur le Scrum Guide 2020, la section du guide concernée et, facultativement, des explications ciblées par mauvaise région. Les tests automatiques MUST refuser un paquet dont une carte a un identifiant en double, une région inconnue, un texte ou une explication vide, ou une explication ciblée pour sa propre bonne région.
@@ -44,7 +44,7 @@ Une carte non placée à la fin du chrono SHALL avoir le verdict « Faux ».
 - **THEN** le verdict est « Faux »
 
 #### Scenario: Responsabilité réelle mise au piège
-- **GIVEN** la carte « Annuler le Sprint si l'Objectif de Sprint devient obsolète », bonne région Product Owner
+- **GIVEN** la carte « Annuler le Sprint si le Sprint Goal devient obsolète », bonne région Product Owner
 - **WHEN** le joueur la place dans la zone Piège
 - **THEN** le verdict est « Faux »
 

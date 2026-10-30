@@ -7,8 +7,8 @@ context: |
   responsabilités dans un diagramme de Venn (Product Owner, Scrum Master, Developers, intersections,
   centre = Scrum Team) ou dans une zone « Piège » pour les responsabilités qui n'existent pas dans Scrum.
   Vocabulaire de la traduction française officielle du Scrum Guide 2020 (novembre 2020) : redevable,
-  Product Owner, Scrum Master, Developers, Scrum Team, Objectif de Produit, Objectif de Sprint,
-  Definition of Done, affinement du Product Backlog.
+  Product Owner, Scrum Master, Developers, Scrum Team, Definition of Done ; termes gardés en anglais :
+  Product Goal, Sprint Goal, refinement (du Product Backlog).
   Chaque explication de carte s'appuie sur le Scrum Guide 2020 ; le paquet de cartes est un fichier JSON
   du dépôt (site/data/cards.json), relu et validé par l'auteur.
   Déroulé collectif en temps réel : un formateur (qui ne joue pas) anime depuis un écran projeté ;
@@ -25,7 +25,9 @@ context: |
   dans la limite autorisée par les règles de sécurité.
   Stack : HTML/CSS/JavaScript vanilla en modules ES, sans framework ni étape de build (dossier site/),
   comme poker-planning. Architecture : site/js/game-core.js contient la logique métier pure (sans DOM ni Firebase) ;
-  site/js/room-store.js est le seul module qui parle à Firebase ; site/js/ui.js gère l'interface.
+  site/js/game-store.js porte les actions de la partie sur une interface de base de données ;
+  site/js/firebase-db.js est le seul module qui parle à Firebase ; site/js/memory-db.js implémente la même
+  interface en mémoire (tests de parcours et mode démo ?demo) ; site/js/ui.js gère l'interface.
   Les règles de sécurité Firebase (database.rules.json) doivent appliquer les mêmes contraintes que l'interface.
   Interface en français, sans compte.
   Tests : lanceur intégré de Node.js (npm test), à faire évoluer avec chaque changement de comportement ;

@@ -15,13 +15,13 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 ## Product Owner
 
-### po-01 · Formuler et communiquer explicitement l'Objectif de Produit
+### po-01 · Formuler et communiquer explicitement le Product Goal
 
 **Explication** (Product Owner) : Le Scrum Guide place cette responsabilité en tête de la liste de celles du Product Owner, qui est redevable (accountable) d'une gestion efficace du Product Backlog.
 
-- Si placée en **Scrum Team** : La Scrum Team travaille vers l'Objectif de Produit, mais c'est le Product Owner qui le développe et le communique.
-- Si placée en **Scrum Master** : Le Scrum Master aide à trouver des techniques pour définir efficacement l'Objectif de Produit, mais il ne le définit pas.
-- Si placée en **Product Owner + Scrum Master** : Le Scrum Master aide à trouver des techniques pour définir l'Objectif de Produit, mais c'est le Product Owner seul qui le développe et le communique.
+- Si placée en **Scrum Team** : La Scrum Team travaille vers le Product Goal, mais c'est le Product Owner qui le développe et le communique.
+- Si placée en **Scrum Master** : Le Scrum Master aide à trouver des techniques pour définir efficacement le Product Goal, mais il ne le définit pas.
+- Si placée en **Product Owner + Scrum Master** : Le Scrum Master aide à trouver des techniques pour définir le Product Goal, mais c'est le Product Owner seul qui le développe et le communique.
 
 ### po-02 · Créer et communiquer clairement les éléments du Product Backlog
 
@@ -49,19 +49,19 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 - Si placée en **Scrum Team** : Toute la Scrum Team crée de la valeur, mais la maximisation de la valeur du produit est la redevabilité propre du Product Owner.
 
-### po-06 · Annuler le Sprint si l'Objectif de Sprint devient obsolète
+### po-06 · Annuler le Sprint si le Sprint Goal devient obsolète
 
 **Explication** (Sprint) : Seul le Product Owner a l'autorité d'annuler un Sprint.
 
 - Si placée en **Scrum Master** : Le Scrum Master n'a pas l'autorité d'annuler un Sprint : seul le Product Owner l'a.
 - Si placée en **Scrum Team** : La Scrum Team peut en discuter, mais seul le Product Owner a l'autorité d'annuler un Sprint.
-- Si placée en **Piège** : Ce n'est pas un piège : un Sprint peut être annulé si son Objectif de Sprint devient obsolète, et seul le Product Owner en a l'autorité.
+- Si placée en **Piège** : Ce n'est pas un piège : un Sprint peut être annulé si son Sprint Goal devient obsolète, et seul le Product Owner en a l'autorité.
 
 ### po-08 · En Sprint Planning, proposer comment le produit pourrait gagner en valeur durant ce Sprint
 
-**Explication** (Sprint Planning) : Lors du premier sujet du Sprint Planning, le Product Owner fait cette proposition ; ensuite, toute la Scrum Team définit l'Objectif de Sprint.
+**Explication** (Sprint Planning) : Lors du premier sujet du Sprint Planning, le Product Owner fait cette proposition ; ensuite, toute la Scrum Team définit le Sprint Goal.
 
-- Si placée en **Scrum Team** : La Scrum Team définit ensuite l'Objectif de Sprint ensemble, mais la proposition de départ vient du Product Owner.
+- Si placée en **Scrum Team** : La Scrum Team définit ensuite le Sprint Goal ensemble, mais la proposition de départ vient du Product Owner.
 
 ### po-09 · Arbitrer les demandes des parties prenantes qui veulent faire modifier le Product Backlog
 
@@ -71,7 +71,7 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 ### po-11 · Préparer les participants du Sprint Planning à discuter des éléments les plus importants
 
-**Explication** (Sprint Planning) : En Sprint Planning, le Product Owner s'assure que les participants sont prêts à discuter des éléments les plus importants du Product Backlog et de leur lien avec l'Objectif de Produit.
+**Explication** (Sprint Planning) : En Sprint Planning, le Product Owner s'assure que les participants sont prêts à discuter des éléments les plus importants du Product Backlog et de leur lien avec le Product Goal.
 
 - Si placée en **Scrum Team** : Toute la Scrum Team discute de ces éléments, mais c'est le Product Owner qui s'assure que les participants y sont préparés.
 - Si placée en **Scrum Master** : Le Scrum Master s'assure que le Sprint Planning a lieu, mais préparer la discussion sur les éléments du Product Backlog revient au Product Owner.
@@ -110,11 +110,11 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 - Si placée en **Scrum Team** : Toute la Scrum Team participe aux événements, mais c'est le Scrum Master qui s'assure qu'ils ont lieu et qu'ils sont productifs.
 
-### sm-06 · Aider à trouver des techniques pour définir l'Objectif de Produit et gérer le Product Backlog
+### sm-06 · Aider à trouver des techniques pour définir le Product Goal et gérer le Product Backlog
 
-**Explication** (Scrum Master) : C'est un service du Scrum Master au Product Owner : il aide, mais l'Objectif de Produit et le Product Backlog restent la responsabilité du Product Owner.
+**Explication** (Scrum Master) : C'est un service du Scrum Master au Product Owner : il aide, mais le Product Goal et le Product Backlog restent la responsabilité du Product Owner.
 
-- Si placée en **Product Owner** : Le Product Owner définit l'Objectif de Produit et gère le Product Backlog ; le Scrum Master, lui, l'aide à trouver des techniques pour le faire efficacement.
+- Si placée en **Product Owner** : Le Product Owner définit le Product Goal et gère le Product Backlog ; le Scrum Master, lui, l'aide à trouver des techniques pour le faire efficacement.
 - Si placée en **Product Owner + Scrum Master** : Le Product Owner applique ces techniques, mais la carte décrit l'aide apportée : c'est un service du Scrum Master au Product Owner.
 
 ### sm-07 · Faciliter la collaboration avec les parties prenantes, selon les demandes ou les besoins
@@ -170,7 +170,7 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 **Explication** (Developers) : Le Scrum Guide l'attribue explicitement aux Developers.
 
 - Si placée en **Scrum Master** : Le Scrum Master ne planifie pas le Sprint à la place des Developers.
-- Si placée en **Scrum Team** : L'Objectif de Sprint est défini par toute la Scrum Team, mais le Sprint Backlog est le plan des Developers, par les Developers.
+- Si placée en **Scrum Team** : Le Sprint Goal est défini par toute la Scrum Team, mais le Sprint Backlog est le plan des Developers, par les Developers.
 - Si placée en **Product Owner + Developers** : Le Product Owner aide à clarifier les éléments, mais le plan du Sprint est créé par et pour les Developers.
 
 ### dev-02 · Inculquer la notion de qualité en adhérant à une Definition of Done
@@ -180,7 +180,7 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 - Si placée en **Scrum Master** : Le Scrum Master aide l'équipe à se concentrer sur des Increments qui respectent la Definition of Done, mais ce sont les Developers qui inculquent la qualité.
 - Si placée en **Product Owner** : Le Product Owner ne contrôle pas la qualité : ce sont les Developers qui respectent la Definition of Done.
 
-### dev-03 · Adapter chaque jour le plan du Sprint pour atteindre l'Objectif de Sprint
+### dev-03 · Adapter chaque jour le plan du Sprint pour atteindre le Sprint Goal
 
 **Explication** (Developers) : Le Scrum Guide l'attribue explicitement aux Developers, notamment lors du Daily Scrum.
 
@@ -239,13 +239,13 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 - Si placée en **Product Owner** : Le Product Owner affine le Product Backlog, mais le découpage en tâches pour le Sprint est le travail des Developers.
 - Si placée en **Product Owner + Developers** : Découper avec le Product Owner, c'est affiner le Product Backlog. Ici, il s'agit du plan de travail du Sprint, qui revient aux Developers.
 
-### dev-11 · S'engager sur l'Objectif de Sprint
+### dev-11 · S'engager sur le Sprint Goal
 
-**Explication** (Sprint Backlog) : L'Objectif de Sprint est l'engagement des Developers : il leur donne de la souplesse sur le travail exact à réaliser.
+**Explication** (Sprint Backlog) : Le Sprint Goal est l'engagement des Developers : il leur donne de la souplesse sur le travail exact à réaliser.
 
-- Si placée en **Scrum Team** : L'Objectif de Sprint est défini par toute la Scrum Team, mais le Scrum Guide précise que c'est l'engagement des Developers.
-- Si placée en **Product Owner** : Le Product Owner contribue à l'Objectif de Sprint, mais le Scrum Guide en fait l'engagement des Developers.
-- Si placée en **Piège** : Ce n'est pas un piège : le Scrum Guide 2020 fait de l'Objectif de Sprint l'engagement des Developers.
+- Si placée en **Scrum Team** : Le Sprint Goal est défini par toute la Scrum Team, mais le Scrum Guide précise que c'est l'engagement des Developers.
+- Si placée en **Product Owner** : Le Product Owner contribue au Sprint Goal, mais le Scrum Guide en fait l'engagement des Developers.
+- Si placée en **Piège** : Ce n'est pas un piège : le Scrum Guide 2020 fait du Sprint Goal l'engagement des Developers.
 
 ### dev-12 · S'engager à traiter tout ou partie utile d'un Increment à chaque Sprint
 
@@ -277,22 +277,22 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 ### podev-02 · Clarifier et renégocier le périmètre du Sprint au fur et à mesure qu'on en apprend davantage
 
-**Explication** (Sprint) : Le Scrum Guide prévoit que le périmètre peut être clarifié et renégocié avec le Product Owner au fil du Sprint, sans mettre en danger l'Objectif de Sprint.
+**Explication** (Sprint) : Le Scrum Guide prévoit que le périmètre peut être clarifié et renégocié avec le Product Owner au fil du Sprint, sans mettre en danger le Sprint Goal.
 
 - Si placée en **Product Owner** : Le Product Owner ne renégocie pas seul : il le fait avec les Developers, qui portent le Sprint Backlog.
 - Si placée en **Developers** : Les Developers ne modifient pas seuls le périmètre : la renégociation se fait avec le Product Owner.
-- Si placée en **Piège** : Ce n'est pas un piège : le Scrum Guide autorise à clarifier et renégocier le périmètre, tant que l'Objectif de Sprint n'est pas mis en danger.
+- Si placée en **Piège** : Ce n'est pas un piège : le Scrum Guide autorise à clarifier et renégocier le périmètre, tant que le Sprint Goal n'est pas mis en danger.
 
 
 ## Scrum Team
 
-### team-01 · Définir l'Objectif de Sprint
+### team-01 · Définir le Sprint Goal
 
-**Explication** (Sprint Planning) : Lors du Sprint Planning, toute la Scrum Team collabore pour définir l'Objectif de Sprint.
+**Explication** (Sprint Planning) : Lors du Sprint Planning, toute la Scrum Team collabore pour définir le Sprint Goal.
 
-- Si placée en **Product Owner** : Le Product Owner propose comment augmenter la valeur, mais c'est toute la Scrum Team qui définit l'Objectif de Sprint.
-- Si placée en **Developers** : Les Developers s'engagent sur l'Objectif de Sprint, mais c'est toute la Scrum Team qui le définit.
-- Si placée en **Product Owner + Developers** : Le Scrum Guide dit « toute la Scrum Team » : le Scrum Master participe aussi à la définition de l'Objectif de Sprint.
+- Si placée en **Product Owner** : Le Product Owner propose comment augmenter la valeur, mais c'est toute la Scrum Team qui définit le Sprint Goal.
+- Si placée en **Developers** : Les Developers s'engagent sur le Sprint Goal, mais c'est toute la Scrum Team qui le définit.
+- Si placée en **Product Owner + Developers** : Le Scrum Guide dit « toute la Scrum Team » : le Scrum Master participe aussi à la définition du Sprint Goal.
 
 ### team-02 · Créer une Definition of Done adaptée au produit lorsque l'organisation n'en fournit pas
 
@@ -354,19 +354,19 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 - Si placée en **Product Owner** : Le Product Owner n'est pas le seul à pouvoir inviter : c'est la Scrum Team.
 - Si placée en **Piège** : Ce n'est pas un piège : la Scrum Team peut inviter d'autres personnes au Sprint Planning pour obtenir des conseils.
 
-### team-10 · Affiner le Product Backlog : découper les éléments et les préciser
+### team-10 · Faire le refinement du Product Backlog : découper les éléments et les préciser
 
 **Explication** (Product Backlog) : Le Product Backlog est affiné au besoin, et le Scrum Guide précise que la Scrum Team peut affiner les éléments, notamment en Sprint Planning. Le Product Owner reste redevable du Product Backlog et les Developers dimensionnent les éléments.
 
 - Si placée en **Product Owner + Developers** : C'est bien souvent le Product Owner et les Developers qui affinent, mais le Scrum Guide parle de la Scrum Team : le Scrum Master peut y contribuer.
 - Si placée en **Product Owner** : Le Product Owner reste redevable du Product Backlog, mais il n'affine pas seul : le Scrum Guide parle de la Scrum Team.
-- Si placée en **Developers** : Les Developers dimensionnent les éléments, mais l'affinement concerne la Scrum Team, Product Owner compris.
+- Si placée en **Developers** : Les Developers dimensionnent les éléments, mais le refinement concerne la Scrum Team, Product Owner compris.
 
-### team-11 · Atteindre ou abandonner un Objectif de Produit avant de passer au suivant
+### team-11 · Atteindre ou abandonner un Product Goal avant de passer au suivant
 
-**Explication** (Product Backlog) : L'Objectif de Produit est l'objectif à long terme de la Scrum Team, qui doit l'atteindre ou l'abandonner avant de passer au suivant.
+**Explication** (Product Backlog) : Le Product Goal est l'objectif à long terme de la Scrum Team, qui doit l'atteindre ou l'abandonner avant de passer au suivant.
 
-- Si placée en **Product Owner** : Le Product Owner développe et communique l'Objectif de Produit, mais c'est la Scrum Team qui doit l'atteindre ou l'abandonner avant le suivant.
+- Si placée en **Product Owner** : Le Product Owner développe et communique le Product Goal, mais c'est la Scrum Team qui doit l'atteindre ou l'abandonner avant le suivant.
 - Si placée en **Piège** : Ce n'est pas un piège : le Scrum Guide 2020 demande à la Scrum Team d'atteindre ou d'abandonner un objectif avant d'en prendre un autre.
 
 ### team-12 · Partager la même Definition of Done avec les autres équipes du même produit
@@ -378,7 +378,7 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 ### team-13 · Envisager de se réorganiser en plusieurs équipes quand on devient trop nombreux
 
-**Explication** (Scrum Team) : Si la Scrum Team devient trop grande, elle devrait envisager de se réorganiser en plusieurs Scrum Teams cohérentes, axées sur le même produit, avec le même Objectif de Produit, le même Product Backlog et le même Product Owner.
+**Explication** (Scrum Team) : Si la Scrum Team devient trop grande, elle devrait envisager de se réorganiser en plusieurs Scrum Teams cohérentes, axées sur le même produit, avec le même Product Goal, le même Product Backlog et le même Product Owner.
 
 - Si placée en **Scrum Master** : Le Scrum Master peut accompagner cette réflexion, mais le Scrum Guide la confie à la Scrum Team.
 - Si placée en **Piège** : Ce n'est pas un piège : le Scrum Guide recommande à une Scrum Team trop grande d'envisager de se réorganiser.
@@ -432,7 +432,7 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 ### trap-07 · Faire du Daily Scrum un tour de compte rendu individuel devant un animateur
 
-**Explication** (Daily Scrum) : Le Daily Scrum est l'événement des Developers, pour inspecter leur progression vers l'Objectif de Sprint et adapter leur plan. Ce n'est pas un tour de compte rendu devant un animateur.
+**Explication** (Daily Scrum) : Le Daily Scrum est l'événement des Developers, pour inspecter leur progression vers le Sprint Goal et adapter leur plan. Ce n'est pas un tour de compte rendu devant un animateur.
 
 - Si placée en **Scrum Master** : Le Scrum Master s'assure que le Daily Scrum a lieu, mais il ne le transforme pas en point de reporting.
 - Si placée en **Developers** : Les Developers mènent bien le Daily Scrum, mais pour adapter leur plan, pas pour rendre compte à quelqu'un.
@@ -467,18 +467,18 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 
 ### trap-12 · Imposer aux Developers, en cours de Sprint, une demande urgente d'un manager
 
-**Explication** (Sprint) : Le Sprint Backlog appartient aux Developers, et aucun changement ne doit mettre en danger l'Objectif de Sprint. Une demande extérieure passe par le Product Owner et le Product Backlog ; le périmètre peut ensuite être renégocié avec lui.
+**Explication** (Sprint) : Le Sprint Backlog appartient aux Developers, et aucun changement ne doit mettre en danger le Sprint Goal. Une demande extérieure passe par le Product Owner et le Product Backlog ; le périmètre peut ensuite être renégocié avec lui.
 
 - Si placée en **Product Owner** : Le Product Owner peut ordonner la demande dans le Product Backlog, mais il n'impose rien dans le Sprint Backlog.
-- Si placée en **Developers** : Les Developers gèrent le Sprint Backlog, mais une demande extérieure passe d'abord par le Product Owner, sans mettre en danger l'Objectif de Sprint.
+- Si placée en **Developers** : Les Developers gèrent le Sprint Backlog, mais une demande extérieure passe d'abord par le Product Owner, sans mettre en danger le Sprint Goal.
 - Si placée en **Product Owner + Developers** : Le Product Owner et les Developers peuvent renégocier le périmètre ensemble, mais rien n'est imposé de l'extérieur dans le Sprint Backlog.
 
 ### trap-13 · Garantir que tous les éléments du Sprint Backlog seront terminés à la fin du Sprint
 
-**Explication** (Sprint Backlog) : Les Developers s'engagent sur l'Objectif de Sprint, pas sur la totalité des éléments. Le périmètre peut être renégocié au fil du Sprint.
+**Explication** (Sprint Backlog) : Les Developers s'engagent sur le Sprint Goal, pas sur la totalité des éléments. Le périmètre peut être renégocié au fil du Sprint.
 
-- Si placée en **Developers** : Les Developers s'engagent sur l'Objectif de Sprint, pas sur chaque élément du Sprint Backlog.
-- Si placée en **Scrum Master** : Le Scrum Master ne garantit pas le contenu du Sprint : l'engagement porte sur l'Objectif de Sprint.
+- Si placée en **Developers** : Les Developers s'engagent sur le Sprint Goal, pas sur chaque élément du Sprint Backlog.
+- Si placée en **Scrum Master** : Le Scrum Master ne garantit pas le contenu du Sprint : l'engagement porte sur le Sprint Goal.
 
 ### trap-14 · Accepter ou refuser formellement chaque élément livré pendant la Sprint Review
 
@@ -501,10 +501,10 @@ Source : Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland), traduction françai
 - Si placée en **Product Owner** : Le Product Owner rend les éléments clairs, mais le Scrum Guide ne prévoit aucune Definition of Ready.
 - Si placée en **Scrum Team** : Une équipe peut s'en servir comme pratique, mais la Definition of Ready n'existe pas dans le Scrum Guide.
 
-### trap-17 · Assouplir la Definition of Done en cours de Sprint pour atteindre l'Objectif de Sprint
+### trap-17 · Assouplir la Definition of Done en cours de Sprint pour atteindre le Sprint Goal
 
 **Explication** (Sprint) : Durant le Sprint, les objectifs de qualité ne sont jamais revus à la baisse : les Developers sont tenus de se conformer à la Definition of Done.
 
-- Si placée en **Developers** : Les Developers sont tenus de se conformer à la Definition of Done : ils ne l'assouplissent pas pour tenir l'Objectif de Sprint.
+- Si placée en **Developers** : Les Developers sont tenus de se conformer à la Definition of Done : ils ne l'assouplissent pas pour tenir le Sprint Goal.
 - Si placée en **Product Owner** : Le Product Owner peut renégocier le périmètre avec les Developers, jamais la qualité.
 - Si placée en **Scrum Team** : La Scrum Team peut faire évoluer sa Definition of Done, en Sprint Retrospective par exemple, mais jamais la dégrader pour tenir un Sprint.

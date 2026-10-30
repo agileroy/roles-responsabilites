@@ -1,12 +1,12 @@
 ## 1. Paquet de cartes
 
 - [x] 1.1 Rédiger `site/data/cards.json` (régions, cartes, explications, explications ciblées) et `tools/cards-review.mjs`, qui génère `docs/cartes.md`. Vérification : le script génère la vue sans erreur.
-- [ ] 1.2 Intégrer les relectures (fidélité au Scrum Guide 2020, clarté et jouabilité) et faire valider le paquet par l'auteur. Vérification : validation explicite de l'auteur.
+- [ ] 1.2 Intégrer les relectures (fait : 66 cartes après arbitrage) (fidélité au Scrum Guide 2020, clarté et jouabilité) et faire valider le paquet par l'auteur. Vérification : validation explicite de l'auteur.
 - [ ] 1.3 Écrire `tests/cards.test.mjs` : identifiants uniques, régions connues, textes et explications non vides, pas d'explication ciblée pour la bonne région. Vérification : `npm test` au vert, et un test rouge sur un paquet volontairement cassé.
 
 ## 2. Logique métier pure
 
-- [ ] 2.1 Créer `site/js/game-core.js` : régions et ensembles, verdict, choix de l'explication. Vérification : tests de toutes les combinaisons de régions et de chaque scénario de `card-deck`.
+- [ ] 2.1 Créer `site/js/game-core.js` : régions et ensembles, verdict, choix de l'explication, espaces insécables de la typographie française. Vérification : tests de toutes les combinaisons de régions et de chaque scénario de `card-deck`.
 - [ ] 2.2 Ajouter le code de salle, la normalisation du prénom, le maximum de cartes par personne, le mélange et l'ordre de passage avec un aléa injecté. Vérification : tests des scénarios de `game-room` (maximum 5 pour 10 participants, ajustement à 7).
 - [ ] 2.3 Ajouter le joueur suivant (quotas, retraits, passages de tour), la fin de partie et le quota d'un retardataire. Vérification : tests des scénarios « Retardataire », « Paquet épuisé » et « Joueur absent ».
 - [ ] 2.4 Ajouter les scores, le podium et le récapitulatif. Vérification : un test par scénario de `game-results`.

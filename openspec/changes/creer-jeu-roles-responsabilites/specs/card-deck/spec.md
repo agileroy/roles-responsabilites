@@ -24,12 +24,12 @@ Le verdict d'un placement SHALL être calculé à partir des ensembles d'account
 Une carte non placée à la fin du chrono SHALL avoir le verdict « Faux ».
 
 #### Scenario: Placement exact
-- **GIVEN** la carte « Affiner le Product Backlog », bonne région Product Owner + Developers
+- **GIVEN** la carte « Discuter des compromis lors du dimensionnement des éléments du Product Backlog », bonne région Product Owner + Developers
 - **WHEN** le joueur la place dans Product Owner + Developers
 - **THEN** le verdict est « Juste »
 
 #### Scenario: Placement incomplet
-- **GIVEN** la carte « Affiner le Product Backlog », bonne région Product Owner + Developers
+- **GIVEN** la carte « Discuter des compromis lors du dimensionnement des éléments du Product Backlog », bonne région Product Owner + Developers
 - **WHEN** le joueur la place dans Product Owner seul
 - **THEN** le verdict est « Partiel »
 
@@ -60,6 +60,19 @@ Après chaque placement, la correction SHALL afficher la bonne région, le verdi
 - **GIVEN** une carte sans explication ciblée pour la région Scrum Master
 - **WHEN** le joueur la place dans Scrum Master
 - **THEN** la correction affiche l'explication générale et la référence au Scrum Guide
+
+#### Scenario: Affinage placé dans Product Owner + Developers
+- **GIVEN** la carte « Affiner le Product Backlog », bonne région Scrum Team
+- **WHEN** le joueur la place dans Product Owner + Developers
+- **THEN** le verdict est « Partiel »
+
+### Requirement: Typographie française
+À l'affichage, le texte des cartes et des explications SHALL utiliser une espace insécable avant « : », « ; », « ! » et « ? » et à l'intérieur des guillemets « », pour éviter un retour à la ligne isolant la ponctuation. Le fichier JSON MAY contenir des espaces ordinaires ; la conversion SHALL être faite par la logique d'affichage et testée.
+
+#### Scenario: Deux-points en fin de ligne
+- **GIVEN** une explication contenant « Ce n'est pas un piège : … »
+- **WHEN** elle s'affiche sur un téléphone de 360 px
+- **THEN** les deux-points ne sont jamais seuls en début de ligne
 
 ### Requirement: Vue de relecture du paquet
 Un script (`node tools/cards-review.mjs`) SHALL générer `docs/cartes.md`, une vue lisible du paquet regroupée par bonne région, avec pour chaque carte son texte, son explication, sa référence et ses explications ciblées.

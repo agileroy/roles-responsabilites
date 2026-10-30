@@ -40,14 +40,14 @@ L'écran du formateur SHALL afficher en grand le code de la salle, un QR code de
 Avant le lancement, le formateur SHALL choisir le nombre de cartes par personne et le chrono (sans chrono, 30, 45 ou 60 secondes ; sans chrono par défaut). Le nombre de cartes par personne SHALL aller de 1 au maximum possible, égal au nombre de cartes du paquet divisé par le nombre de participants, arrondi à l'entier inférieur ; il SHALL valoir ce maximum par défaut et être ramené au nouveau maximum si un participant arrive. Le bouton « Lancer la partie » SHALL être désactivé tant qu'aucun participant n'est présent.
 
 #### Scenario: Maximum proposé
-- **GIVEN** un paquet de 59 cartes et 10 participants présents
+- **GIVEN** un paquet de 66 cartes et 10 participants présents
 - **WHEN** le formateur ouvre les réglages
-- **THEN** le nombre de cartes par personne vaut 5 et ne peut pas dépasser 5
+- **THEN** le nombre de cartes par personne vaut 6 et ne peut pas dépasser 6
 
 #### Scenario: Ajustement à l'arrivée d'un participant
-- **GIVEN** un paquet de 59 cartes, 7 participants et le réglage à 8 cartes par personne
+- **GIVEN** un paquet de 66 cartes, 7 participants et le réglage à 9 cartes par personne
 - **WHEN** un huitième participant arrive
-- **THEN** le réglage est ramené à 7 cartes par personne
+- **THEN** le réglage est ramené à 8 cartes par personne
 
 ### Requirement: Lancement et tirage
 Au lancement, le jeu SHALL mélanger le paquet et figer l'ordre de passage des participants présents, tiré au hasard. Toutes les cartes piochées pendant une partie MUST être différentes. Chaque participant présent au lancement SHALL piocher exactement le nombre de cartes réglé, sauf s'il quitte la partie.

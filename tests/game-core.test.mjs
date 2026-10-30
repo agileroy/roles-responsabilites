@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   REGIONS, verdict, explanationFor, frenchTypography, validateDeck, validateName, normalizeName, nameKey,
-  generateCode, isValidCode, normalizeCode, maxCardsPerPlayer, deckStats, dealHands, undealtCards, clampCardsPerPlayer, shuffle, asList,
+  generateCode, isValidCode, normalizeCode, maxCardsPerPlayer, deckStats, dealHands, undealtCards, drawTrainingDeck, clampCardsPerPlayer, shuffle, asList,
   nextPlayer, lateQuota, playedCounts, secondsLeft, teamScore, playerScores, podium, mistakes, formatPercent,
 } from '../site/js/game-core.js';
 
@@ -322,4 +322,36 @@ test('récapitulatif : cartes partielles et fausses, dans l\'ordre joué, avec e
   assert.deepEqual(list.map((m) => [m.seq, m.playerUid, m.region]), [[1, 'marc', 'sm'], [2, 'ines', 'team']]);
   assert.equal(list[0].explanation.targeted, 'Pas chef.');
   assert.deepEqual(mistakes({ 0: results[0] }, cards), []);
+});
+
+// ---------------------------------------------------------------- Entraînement seul
+
+test('entraînement : cartes différentes et au moins 1 piège par partie', () => {
+  for (let round = 0; round < 300; round += 1) {
+    const ids = drawTrainingDeck(fakeDeck, 10);
+    assert.equal(ids.length, 10);
+    assert.equal(new Set(ids).size, 10);
+    assert.ok(ids.some(isTrap), 'au moins un piège');
+  }
+});
+
+test('entraînement : une seule carte est un piège', () => {
+  for (let round = 0; round < 50; round += 1) assert.ok(isTrap(drawTrainingDeck(fakeDeck, 1)[0]));
+});
+
+test('entraînement : nombre ramené dans [1, taille du paquet], 10 par défaut', () => {
+  assert.equal(drawTrainingDeck(fakeDeck, 200).length, 67);
+  assert.equal(drawTrainingDeck(fakeDeck, 0).length, 1);
+  assert.equal(drawTrainingDeck(fakeDeck, '').length, 10);
+  assert.equal(drawTrainingDeck(fakeDeck, 'abc').length, 10);
+  assert.equal(drawTrainingDeck(fakeDeck, '20').length, 20);
+  assert.equal(drawTrainingDeck(fakeDeck, -3).length, 1);
+});
+
+test('entraînement : le remplacement par un piège ne crée pas de doublon', () => {
+  // Aléa qui ne mélange rien : les 3 premières cartes non piège sont tirées, puis remplacées.
+  const noTrapFirst = [...fakeDeck.slice(16), ...fakeDeck.slice(0, 16)];
+  const ids = drawTrainingDeck(noTrapFirst, 3, () => 0.999);
+  assert.equal(new Set(ids).size, 3);
+  assert.equal(ids.filter(isTrap).length, 1);
 });

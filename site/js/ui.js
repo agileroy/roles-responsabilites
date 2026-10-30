@@ -4,7 +4,7 @@
 import {
   MAX_PLAYERS, TIMER_CHOICES, REGION_LABELS, VERDICT_LABELS, frenchTypography, explanationFor, normalizeCode,
   isValidCode, deckStats, maxCardsPerPlayer, clampCardsPerPlayer, nextPlayer, playedCounts, resultList, secondsLeft,
-  teamScore, playerScores, podium, mistakes, formatPercent, asList,
+  teamScore, playerScores, podium, mistakes, formatPercent, asList, verdict, shuffle, drawTrainingDeck,
 } from './game-core.js?v=__VERSION__';
 import { createVenn } from './venn.js?v=__VERSION__';
 import { activePlayers, isConnected, effectiveCardsPerPlayer, hostReactions } from './game-store.js?v=__VERSION__';
@@ -95,16 +95,18 @@ export async function startApp(gameStore, { deck }) {
   const inFlight = new Set();
   let busy = false;
 
+  // Sans service temps réel, seul l'entraînement seul reste disponible.
+  const OFFLINE_MESSAGE = 'Service temps réel injoignable : vérifiez votre connexion et rechargez la page. L\'entraînement seul reste disponible.';
+  let offline = false;
   try {
     await gameStore.start();
   } catch (error) {
     console.error('Connexion refusée :', error?.code ?? error);
-    showFatal('Impossible de se connecter au service temps réel. Vérifiez votre connexion, puis rechargez la page.');
-    return;
+    offline = true;
   }
   const uid = gameStore.uid;
 
-  gameStore.onConnection((connected) => {
+  if (!offline) gameStore.onConnection((connected) => {
     everConnected ||= connected;
     $('banner').hidden = connected || !everConnected;
     $('banner').textContent = 'Connexion perdue, reconnexion…';
@@ -135,6 +137,7 @@ export async function startApp(gameStore, { deck }) {
 
   const venn = createVenn($('venn'), {
     onSelect(region) {
+      if (solo) { soloSelect(region); return; }
       if (!room?.turn || room.turn.playerUid !== uid || room.turn.placement) return;
       localSelection = region;
       localSelectionSeq = room.turn.seq;
@@ -180,6 +183,7 @@ export async function startApp(gameStore, { deck }) {
   }
 
   $('create-room').addEventListener('click', async () => {
+    if (offline) { $('create-error').textContent = OFFLINE_MESSAGE; return; }
     if (busy) return;
     busy = true;
     $('create-room').disabled = true;
@@ -203,6 +207,7 @@ export async function startApp(gameStore, { deck }) {
 
   $('join-form').addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (offline) { $('join-error').textContent = OFFLINE_MESSAGE; return; }
     if (busy) return;
     const joinCode = code ?? normalizeCode($('code-input').value);
     const name = $('name-input').value;
@@ -249,6 +254,8 @@ export async function startApp(gameStore, { deck }) {
   }
 
   function render() {
+    document.body.dataset.mode = solo ? 'solo' : 'room';
+    if (solo) { renderSolo(); return; }
     if (!code) { showHome(); return; }
     if (!roomLoaded) return;
     const who = role();
@@ -469,18 +476,8 @@ export async function startApp(gameStore, { deck }) {
       : { selection });
 
     // Correction
-    $('correction').hidden = !(result && card);
+    renderCorrection(card, result);
     if (result && card) {
-      const verdictNode = $('verdict');
-      verdictNode.textContent = result.timedOut ? `${VERDICT_LABELS[result.verdict]} · Temps écoulé` : VERDICT_LABELS[result.verdict];
-      verdictNode.className = `verdict verdict-${result.verdict}`;
-      $('chosen-region').textContent = result.region ? REGION_LABELS[result.region] : 'Aucun (temps écoulé)';
-      $('correct-region').textContent = REGION_LABELS[card.answer];
-      const explanation = explanationFor(card, result.region ?? null);
-      $('explanation-targeted').hidden = !explanation.targeted;
-      setTypo($('explanation-targeted'), explanation.targeted ?? '');
-      setTypo($('explanation'), explanation.general);
-      $('reference').textContent = `Scrum Guide 2020 · ${explanation.reference}`;
       if (lastRevealedSeq !== turn.seq) {
         if (lastRevealedSeq !== null && turn.playerUid === uid) navigator.vibrate?.(150); // pas au chargement
         lastRevealedSeq = turn.seq;
@@ -488,6 +485,7 @@ export async function startApp(gameStore, { deck }) {
     }
 
     // Formateur
+    $('solo-controls').hidden = true;
     $('host-controls').hidden = !isHost;
     if (isHost) {
       renderJoinInfo();
@@ -495,7 +493,7 @@ export async function startApp(gameStore, { deck }) {
       $('next-card').hidden = !(turn.revealed || turn.done);
       $('next-card').textContent = hasNext && !turn.done ? 'Carte suivante' : 'Voir les résultats';
       $('skip-turn').hidden = Boolean(turn.revealed || turn.done);
-      $('skip-turn').textContent = card ? 'Passer son tour (la carte retourne dans le paquet)' : 'Passer son tour';
+      $('skip-turn').textContent = card ? 'Passer son tour (il retrouvera cette carte)' : 'Passer son tour';
       const team = teamScore(results);
       $('score-line').textContent = team.count
         ? `Équipe : ${formatPercent(team.percent)} · ${team.right} juste${team.right > 1 ? 's' : ''}, ${team.partial} partiel${team.partial > 1 ? 's' : ''}, ${team.wrong} faux`
@@ -525,15 +523,37 @@ export async function startApp(gameStore, { deck }) {
     renderTimer();
   }
 
+  /** Correction d'une carte (verdict, régions, explications), commune à la partie en groupe et à l'entraînement. */
+  function renderCorrection(card, result) {
+    $('correction').hidden = !(result && card);
+    if (!result || !card) return;
+    const verdictNode = $('verdict');
+    verdictNode.textContent = result.timedOut ? `${VERDICT_LABELS[result.verdict]} · Temps écoulé` : VERDICT_LABELS[result.verdict];
+    verdictNode.className = `verdict verdict-${result.verdict}`;
+    $('chosen-region').textContent = result.region ? REGION_LABELS[result.region] : 'Aucun (temps écoulé)';
+    $('correct-region').textContent = REGION_LABELS[card.answer];
+    const explanation = explanationFor(card, result.region ?? null);
+    $('explanation-targeted').hidden = !explanation.targeted;
+    setTypo($('explanation-targeted'), explanation.targeted ?? '');
+    setTypo($('explanation'), explanation.general);
+    $('reference').textContent = `Scrum Guide 2020 · ${explanation.reference}`;
+  }
+
   /**
    * Carte face cachée, retournée quand le joueur actif la touche. L'animation n'est jouée que si cet écran
    * a vu la carte face cachée : au chargement d'une carte déjà retournée, elle s'affiche directement.
    */
   let shownCardKey;          // undefined : premier rendu ; null : face cachée ; sinon tour et carte affichés
   function renderFlipCard(turn, card, isMine) {
+    showFlipCard({
+      key: card ? `${turn.seq}:${turn.cardId}` : null, card, hidden: Boolean(turn.done),
+      canFlip: isMine && !card && !turn.done, waitingText: `${nameOf(turn.playerUid)} va retourner la carte`,
+    });
+  }
+
+  function showFlipCard({ key, card, hidden, canFlip, waitingText }) {
     const flip = $('flip-card');
-    $('flip-card').closest('.card-stage').hidden = Boolean(turn.done);
-    const key = card ? `${turn.seq}:${turn.cardId}` : null;
+    flip.closest('.card-stage').hidden = hidden;
     if (key !== shownCardKey) {
       const animate = shownCardKey === null && key !== null;
       flip.classList.toggle('no-anim', !animate);
@@ -542,11 +562,10 @@ export async function startApp(gameStore, { deck }) {
       shownCardKey = key;
       if (!animate) requestAnimationFrame(() => requestAnimationFrame(() => flip.classList.remove('no-anim')));
     }
-    const canFlip = isMine && !card && !turn.done;
     flip.disabled = !canFlip;
     if (canFlip) flip.setAttribute('aria-label', 'Retourner la carte');
     else flip.removeAttribute('aria-label');
-    $('back-hint').textContent = canFlip ? 'Touchez la carte pour la retourner' : `${nameOf(turn.playerUid)} va retourner la carte`;
+    $('back-hint').textContent = canFlip ? 'Touchez la carte pour la retourner' : waitingText;
     $('flip-back').setAttribute('aria-hidden', String(Boolean(card)));
     $('flip-front').setAttribute('aria-hidden', String(!card));
   }
@@ -568,9 +587,11 @@ export async function startApp(gameStore, { deck }) {
   }
 
   $('flip-card').addEventListener('click', () => {
+    if (solo) { soloFlip(); return; }
     if (room?.turn?.playerUid === uid && !room.turn.cardId) gameStore.draw(code, room);
   });
   $('validate').addEventListener('click', async () => {
+    if (solo) { soloValidate(); return; }
     const selection = localSelection ?? room?.turn?.selection;
     if (!room || !selection) return;
     $('validate').disabled = true;
@@ -627,8 +648,17 @@ export async function startApp(gameStore, { deck }) {
       return item;
     }));
 
+    renderRecap(results, { withNames: true });
+    $('recap-none').textContent = 'Aucune erreur, bravo à toute l\'équipe !';
+    $('end-score-title').textContent = 'Score de l\'équipe';
+    $('solo-end-actions').hidden = true;
+    $('end-actions').hidden = !isHost;
+  }
+
+  /** Récapitulatif des cartes partielles et fausses, avec leurs explications. */
+  function renderRecap(results, { withNames }) {
     const list = mistakes(results, cardsById);
-    $('recap-none').hidden = list.length > 0 || !team.count;
+    $('recap-none').hidden = list.length > 0 || !teamScore(results).count;
     $('recap').replaceChildren(...list.map((mistake) => {
       const item = document.createElement('li');
       item.className = `recap-item verdict-border-${mistake.verdict}`;
@@ -637,8 +667,8 @@ export async function startApp(gameStore, { deck }) {
       setTypo(head, mistake.card.text);
       const meta = document.createElement('p');
       meta.className = 'recap-meta';
+      if (withNames) meta.append(text('span', nameOf(mistake.playerUid), 'recap-player'));
       meta.append(
-        text('span', nameOf(mistake.playerUid), 'recap-player'),
         text('span', mistake.region ? REGION_LABELS[mistake.region] : 'Temps écoulé', `recap-chosen verdict-${mistake.verdict}`),
         text('span', '→', 'recap-arrow'),
         text('span', REGION_LABELS[mistake.card.answer], 'recap-correct'),
@@ -656,7 +686,6 @@ export async function startApp(gameStore, { deck }) {
       item.append(general, text('p', `Scrum Guide 2020 · ${mistake.explanation.reference}`, 'reference'));
       return item;
     }));
-    $('end-actions').hidden = !isHost;
   }
 
   $('new-game').addEventListener('click', async () => {
@@ -670,9 +699,145 @@ export async function startApp(gameStore, { deck }) {
     } finally { busy = false; }
   });
 
+  // ---------------------------------------------------------------- Entraînement seul
+  // Tout est local : aucune écriture dans la base ni dans le stockage du navigateur.
+
+  let solo = null;   // { ids, index, flipped, selection, results, finished }
+
+  function startSolo(ids) {
+    stopWatching?.();
+    stopWatching = null;
+    code = null;
+    room = null;
+    roomLoaded = false;
+    gameStore.closePresence?.();
+    if (location.search.includes('salle=')) history.replaceState(null, '', urlFor(null));
+    solo = { ids, index: 0, flipped: false, selection: null, results: {}, finished: false };
+    shownCardKey = undefined;
+    render();
+    window.scrollTo(0, 0);
+  }
+
+  function soloCard() {
+    return cardsById[solo.ids[solo.index]];
+  }
+
+  function soloFlip() {
+    if (solo.finished || solo.flipped) return;
+    solo.flipped = true;
+    render();
+  }
+
+  function soloSelect(region) {
+    if (!solo.flipped || solo.results[solo.index]) return;
+    solo.selection = region;
+    render();
+  }
+
+  function soloValidate() {
+    if (!solo.flipped || !solo.selection || solo.results[solo.index]) return;
+    const card = soloCard();
+    solo.results[solo.index] = { playerUid: 'solo', cardId: card.id, region: solo.selection, verdict: verdict(solo.selection, card.answer), timedOut: false };
+    render();
+  }
+
+  function soloNext() {
+    if (!solo.results[solo.index]) return;
+    if (solo.index + 1 >= solo.ids.length) { solo.finished = true; }
+    else { solo.index += 1; solo.flipped = false; solo.selection = null; }
+    render();
+    window.scrollTo(0, 0);
+  }
+
+  function renderSolo() {
+    $('room-chip').hidden = true;
+    $('me-name').hidden = true;
+    document.body.classList.remove('is-host');
+    if (solo.finished) { renderSoloEnd(); return; }
+    showScreen('game');
+    const card = soloCard();
+    const result = solo.results[solo.index] ?? null;
+    const total = solo.ids.length;
+    const last = solo.index + 1 >= total;
+    $('turn-who').textContent = `Carte ${solo.index + 1} sur ${total}`;
+    $('turn-bar').classList.toggle('is-mine', !result);
+    $('timer').hidden = true;
+    $('card-meta').textContent = 'Entraînement';
+    showFlipCard({
+      key: solo.flipped ? `solo:${solo.index}:${card.id}` : null, card: solo.flipped ? card : null,
+      hidden: false, canFlip: !solo.flipped, waitingText: '',
+    });
+    const choosing = solo.flipped && !result;
+    $('validate').hidden = !choosing;
+    $('validate').disabled = !solo.selection;
+    $('card-hint').textContent = choosing
+      ? (solo.selection ? `Votre choix : ${REGION_LABELS[solo.selection]}. Validez quand vous êtes sûr.` : 'Touchez une zone du diagramme, puis validez.')
+      : '';
+    venn.setInteractive(Boolean(choosing));
+    venn.update(result ? { chosen: result.region, correct: card.answer, verdict: result.verdict } : { selection: solo.selection });
+    renderCorrection(card, result);
+    $('host-controls').hidden = true;
+    $('my-progress').hidden = true;
+    $('solo-controls').hidden = false;
+    $('solo-next').hidden = !result;
+    $('solo-next').textContent = last ? 'Voir les résultats' : 'Carte suivante';
+    const score = teamScore(solo.results);
+    $('solo-score').textContent = score.count
+      ? `Score : ${formatPercent(score.percent)} · ${score.right} juste${score.right > 1 ? 's' : ''}, ${score.partial} partiel${score.partial > 1 ? 's' : ''}, ${score.wrong} faux`
+      : 'Score : aucune carte jouée';
+  }
+
+  function renderSoloEnd() {
+    showScreen('end');
+    const score = teamScore(solo.results);
+    $('end-score-title').textContent = 'Votre score';
+    $('team-score').textContent = formatPercent(score.percent);
+    $('team-detail').textContent = score.count
+      ? `${score.count} carte${score.count > 1 ? 's' : ''} jouée${score.count > 1 ? 's' : ''} · ${score.right} juste${score.right > 1 ? 's' : ''} · ${score.partial} partiel${score.partial > 1 ? 's' : ''} · ${score.wrong} faux`
+      : 'Aucune carte jouée.';
+    $('my-score').hidden = true;
+    $('podium-panel').hidden = true;
+    renderRecap(solo.results, { withNames: false });
+    $('recap-none').textContent = 'Aucune erreur, bravo !';
+    $('end-actions').hidden = true;
+    $('solo-end-actions').hidden = false;
+    $('replay-mistakes').hidden = !mistakes(solo.results, cardsById).length;
+  }
+
+  $('training-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const ids = drawTrainingDeck(deck.cards, $('training-count').value);
+    $('training-count').value = String(ids.length);
+    startSolo(ids);
+  });
+  $('solo-next').addEventListener('click', soloNext);
+  $('solo-stop').addEventListener('click', async () => {
+    if (!solo) return;
+    const ok = await confirmAction('Arrêter l\'entraînement ?', 'Vous verrez les résultats des cartes déjà jouées.', 'Arrêter');
+    if (!ok) return;
+    solo.finished = true;
+    render();
+  });
+  $('replay-mistakes').addEventListener('click', () => {
+    const ids = mistakes(solo.results, cardsById).map((mistake) => mistake.cardId);
+    if (ids.length) startSolo(shuffle(ids));
+  });
+  $('new-training').addEventListener('click', () => {
+    startSolo(drawTrainingDeck(deck.cards, $('training-count').value));
+  });
+  $('training-home').addEventListener('click', () => {
+    solo = null;
+    shownCardKey = undefined;
+    render();
+    window.scrollTo(0, 0);
+  });
+
   // ---------------------------------------------------------------- Démarrage
 
-  if (code) {
+  if (code && offline) {
+    code = null;
+    showHome(OFFLINE_MESSAGE);
+  } else if (code) {
     showScreen('status');
     $('status-text').textContent = 'Ouverture de la salle…';
     watch(code);

@@ -30,11 +30,17 @@ try {
   console.error(error);
   showFatal('Impossible de charger le paquet de cartes. Rechargez la page.');
 }
+/** Base injoignable (SDK Firebase non chargé) : l'interface démarre quand même, pour l'entraînement seul. */
+const unreachableDb = {
+  TIMESTAMP: null,
+  uid: null,
+  start: () => Promise.reject(new Error('Service temps réel injoignable')),
+  serverNow: () => Date.now(),
+  onConnection: () => () => {},
+};
+
 if (deck) {
   createDb()
-    .then((db) => startApp(createGameStore(db), { deck }))
-    .catch((error) => {
-      console.error(error);
-      showFatal('Impossible de charger le service temps réel. Vérifiez votre connexion, puis rechargez la page.');
-    });
+    .catch((error) => { console.error(error); return unreachableDb; })
+    .then((db) => startApp(createGameStore(db), { deck }));
 }

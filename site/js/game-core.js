@@ -193,6 +193,27 @@ export function dealHands(cards, uids, perPlayer, random = Math.random) {
   return hands;
 }
 
+/** Nombre de cartes par défaut d'un entraînement seul. */
+export const TRAINING_DEFAULT_COUNT = 10;
+
+/**
+ * Cartes d'un entraînement seul : `count` cartes différentes tirées au hasard dans tout le paquet
+ * (ramené dans [1, taille du paquet]), avec au moins 1 piège. Renvoie les identifiants dans un ordre aléatoire.
+ */
+export function drawTrainingDeck(cards, count, random = Math.random) {
+  const raw = String(count ?? '').trim();
+  const parsed = Math.floor(Number(raw));
+  const wanted = raw === '' || !Number.isFinite(parsed) ? TRAINING_DEFAULT_COUNT : parsed;
+  const n = Math.min(Math.max(wanted, 1), cards.length);
+  const ids = shuffle(cards.map((card) => card.id), random).slice(0, n);
+  const isTrap = new Set(cards.filter((card) => card.answer === 'trap').map((card) => card.id));
+  if (!ids.some((id) => isTrap.has(id)) && isTrap.size) {
+    const traps = [...isTrap];
+    ids[Math.floor(random() * ids.length)] = traps[Math.floor(random() * traps.length)];
+  }
+  return shuffle(ids, random);
+}
+
 /** Cartes qui ne sont dans aucune main. */
 export function undealtCards(cards, hands) {
   const dealt = new Set(Object.values(hands ?? {}).flatMap((hand) => asList(hand)));

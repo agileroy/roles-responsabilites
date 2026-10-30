@@ -323,6 +323,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 0 16px 40px; }
 .reference { color: var(--muted); font-size: 0.9rem; }
 
 .host-controls { gap: 12px; }
+.solo-controls .button { width: 100%; }
 .host-actions { display: flex; flex-direction: column; gap: 8px; }
 .host-actions .button { width: 100%; }
 .score-line { font-weight: 650; }
@@ -387,7 +388,7 @@ main { max-width: 1400px; margin: 0 auto; padding: 0 16px 40px; }
   .card-panel { order: 2; }
   .venn-wrap { order: 3; }
   .correction { order: 4; }
-  .host-controls { order: 5; }
+  .host-controls, .solo-controls { order: 5; }
   .my-progress { order: 6; }
   .venn { max-height: none; }
   .card-text { font-size: 1.25rem; }

@@ -18,6 +18,16 @@ Jeu de formation PSM / PSPO sur les rôles et responsabilités de Scrum, en temp
 - **Fin de partie** : score de l'équipe, podium des trois meilleurs pourcentages (1 point par carte juste, 0,5 par carte partielle) et récapitulatif des erreurs avec leurs explications.
 - Les salles sont **supprimées au bout de 24 heures** (par le navigateur du prochain formateur qui crée une partie), ou à tout moment par leur formateur.
 
+## Entraînement seul
+
+Depuis l'accueil, « S'entraîner seul » lance une partie sans formateur ni code, pour réviser à son rythme :
+
+- **10 cartes par défaut**, nombre modifiable au clavier (de 1 à tout le paquet), tirées au hasard avec **au moins un piège** ;
+- même déroulé qu'en groupe (carte à retourner, Venn, correction expliquée), sans chrono ;
+- à la fin : score, récapitulatif des erreurs et **« Rejouer mes erreurs »**, qui relance une partie avec uniquement les cartes ratées.
+
+Tout se passe dans le navigateur, sans Firebase : rien n'est enregistré, et l'entraînement reste disponible même si le service temps réel est injoignable.
+
 ## Paquet de cartes
 
 Le paquet est dans [`site/data/cards.json`](site/data/cards.json) : pour chaque carte, son texte, sa bonne région (`po`, `sm`, `dev`, `po-sm`, `po-dev`, `sm-dev`, `team` ou `trap`), une explication générale, la section du Scrum Guide 2020, et des explications ciblées par mauvaise région (`errors`). Vocabulaire : traduction française officielle du Scrum Guide, avec « Product Goal », « Sprint Goal » et « refinement » gardés en anglais.

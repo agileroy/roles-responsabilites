@@ -45,7 +45,7 @@
 
     <!-- Accueil -->
     <section class="screen home" id="screen-home" hidden>
-      <p class="home-intro">Un jeu collectif pour les formations PSM et PSPO : chacun à son tour place une responsabilité dans le bon rôle, ou la démasque comme un piège. Correction à chaque carte, d'après le Scrum Guide 2020.</p>
+      <p class="home-intro">Un jeu pour les formations PSM et PSPO : chacun à son tour place une responsabilité dans le bon rôle, ou la démasque comme un piège. Correction à chaque carte, d'après le Scrum Guide 2020. En groupe avec un formateur, ou seul pour s'entraîner.</p>
       <div class="home-grid">
         <section class="panel home-card" id="home-host" aria-labelledby="home-host-title">
           <h2 id="home-host-title">Animer une partie</h2>
@@ -67,6 +67,17 @@
             </div>
             <p class="error" id="join-error" role="alert" aria-live="assertive"></p>
             <button type="submit" class="button button-primary button-large" id="join-submit">Rejoindre</button>
+          </form>
+        </section>
+        <section class="panel home-card" aria-labelledby="home-solo-title">
+          <h2 id="home-solo-title">S'entraîner seul</h2>
+          <p class="muted">Sans formateur ni code : pour réviser à votre rythme.</p>
+          <form class="join-form" id="training-form" novalidate>
+            <div class="field">
+              <label for="training-count">Nombre de cartes</label>
+              <input id="training-count" type="number" inputmode="numeric" min="1" step="1" value="10">
+            </div>
+            <button type="submit" class="button button-primary button-large" id="start-training">Commencer</button>
           </form>
         </section>
       </div>
@@ -178,6 +189,12 @@
           <button type="button" class="link-button danger" id="end-game">Terminer la partie</button>
         </section>
 
+        <section class="panel solo-controls" id="solo-controls" hidden>
+          <button type="button" class="button button-primary button-large" id="solo-next" hidden>Carte suivante</button>
+          <p class="score-line" id="solo-score"></p>
+          <button type="button" class="link-button danger" id="solo-stop">Arrêter</button>
+        </section>
+
         <section class="panel my-progress" id="my-progress" hidden>
           <p id="my-progress-text"></p>
           <p class="muted" id="team-progress-text"></p>
@@ -188,7 +205,7 @@
     <!-- Fin de partie -->
     <section class="screen end" id="screen-end" hidden>
       <section class="panel end-score">
-        <h2>Score de l'équipe</h2>
+        <h2 id="end-score-title">Score de l'équipe</h2>
         <p class="big-score" id="team-score"></p>
         <p class="score-detail" id="team-detail"></p>
         <p class="my-score" id="my-score" hidden></p>
@@ -202,6 +219,11 @@
         <ol class="recap-list" id="recap"></ol>
         <p class="notice-success" id="recap-none" hidden>Aucune erreur, bravo à toute l'équipe !</p>
       </section>
+      <div class="end-actions" id="solo-end-actions" hidden>
+        <button type="button" class="button button-primary" id="replay-mistakes">Rejouer mes erreurs</button>
+        <button type="button" class="button button-ghost" id="new-training">Nouvel entraînement</button>
+        <button type="button" class="link-button" id="training-home">Retour à l'accueil</button>
+      </div>
       <div class="end-actions" id="end-actions" hidden>
         <button type="button" class="button button-primary" id="new-game">Nouvelle partie</button>
         <button type="button" class="link-button danger" id="delete-room-end">Terminer et supprimer la salle</button>

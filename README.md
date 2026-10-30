@@ -8,10 +8,10 @@ Jeu de formation PSM / PSPO sur les rôles et responsabilités de Scrum, en temp
 
 - Le **formateur** crée une partie sur l'écran projeté : un **code de salle** à 4 lettres et un **QR code** s'affichent. Il anime, il ne joue pas.
 - Les **participants** (10 au maximum) rejoignent depuis leur téléphone, avec le QR code ou le code, et saisissent un prénom unique dans la salle. Pas de compte.
-- Avant de lancer, le formateur règle le **nombre de cartes par personne** (le maximum possible est proposé) et un **chrono** facultatif (30, 45 ou 60 secondes).
-- **Tour par tour**, le joueur actif pioche une carte et la place dans le **diagramme de Venn** : Product Owner, Scrum Master, Developers, leurs intersections, le centre « Scrum Team », ou la zone **Piège** (responsabilité qui n'existe pas dans Scrum). Tout le monde voit son hésitation en direct.
+- Avant de lancer, le formateur règle le **nombre de cartes par personne** (5 par défaut, à saisir au clavier ou avec − et +, dans la limite du maximum possible) et un **chrono** facultatif (30, 45 ou 60 secondes).
+- **Tour par tour**, le joueur actif retourne une carte face cachée et la place dans le **diagramme de Venn** : Product Owner, Scrum Master, Developers, leurs intersections, le centre « Scrum Team », ou la zone **Piège** (responsabilité qui n'existe pas dans Scrum). Tout le monde voit son hésitation en direct.
 - **Correction immédiate** pour toute la salle : juste, partiel ou faux, avec une explication tirée du Scrum Guide 2020, ciblée selon l'erreur commise. Le formateur passe à la carte suivante quand la discussion est terminée.
-- Verdict : juste si la région est exacte ; partiel si la région choisie et la bonne réponse ont au moins un rôle en commun (par exemple « Product Owner » pour une carte « Scrum Team ») ; faux sinon, et toujours faux entre la zone Piège et un rôle.
+- Verdict : juste si la région est exacte ; partiel si le choix est incomplet (par exemple « Product Owner » pour une carte « Scrum Team ») ; faux sinon, et en particulier dès qu'il y a un rôle en trop (« Scrum Team » pour une carte « Product Owner ») ou entre la zone Piège et un rôle. Tout placer au centre ne rapporte donc rien.
 - **Arrivée tardive** : le retardataire pioche autant de cartes qu'il en reste aux autres, dans la limite du paquet ; sinon il suit en spectateur.
 - Le formateur peut **passer le tour** d'un joueur absent (la carte retourne dans le paquet), **retirer** un participant et **terminer** la partie à tout moment.
 - **Fin de partie** : score de l'équipe, podium des trois meilleurs pourcentages (1 point par carte juste, 0,5 par carte partielle) et récapitulatif des erreurs avec leurs explications.

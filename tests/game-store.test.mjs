@@ -55,12 +55,12 @@ test('rejoindre : prénom unique, code inconnu, salle pleine', async () => {
   assert.equal(joinRefusal(t.room(code), 'julie'), null);
 });
 
-test('réglages : maximum par défaut et ajusté à l\'arrivée d\'un participant', async () => {
+test('réglages : 5 par défaut et ajusté à l\'arrivée d\'un participant', async () => {
   const t = setup();
   const host = t.make('host');
   const code = await host.createRoom();
   for (let i = 0; i < 7; i += 1) await t.make(`p${i}`).join(code, `P${i}`);
-  assert.equal(effectiveCardsPerPlayer(t.room(code), 67), 9);
+  assert.equal(effectiveCardsPerPlayer(t.room(code), 67), 5);
   await host.setCardsPerPlayer(code, 9);
   await t.make('p7').join(code, 'P7');
   assert.equal(effectiveCardsPerPlayer(t.room(code), 67), 8);
@@ -185,6 +185,7 @@ test('arrivée tardive : spectateur si le paquet est épuisé', async () => {
   const host = t.make('host');
   const code = await host.createRoom();
   for (let i = 0; i < 9; i += 1) await t.make(`p${i}`).join(code, `P${i}`);
+  await host.setCardsPerPlayer(code, 7);
   await host.launch(code, t.room(code), cardIds.slice(0, 63)); // 63 / 9 = 7 cartes chacun : tout est dû
   await t.make('marc').join(code, 'Marc');
   hostReactions(host, code, t.room(code), cardsById);
@@ -197,6 +198,7 @@ test('arrivée tardive : limitée par les cartes libres du paquet', async () => 
   const host = t.make('host');
   const code = await host.createRoom();
   for (let i = 0; i < 9; i += 1) await t.make(`p${i}`).join(code, `P${i}`);
+  await host.setCardsPerPlayer(code, 7);
   await host.launch(code, t.room(code), cardIds); // 67 / 9 = 7 cartes chacun, 63 dues, 4 libres
   await t.make('marc').join(code, 'Marc');
   hostReactions(host, code, t.room(code), cardsById);

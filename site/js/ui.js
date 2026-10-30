@@ -337,7 +337,10 @@ export async function startApp(gameStore, { deck }) {
 
     const max = maxCardsPerPlayer(cardIds.length, players.length);
     const value = effectiveCardsPerPlayer(room, cardIds.length);
-    $('cards-value').textContent = players.length ? String(value) : '–';
+    const input = $('cards-value');
+    input.max = String(Math.max(max, 1));
+    input.disabled = !players.length;
+    if (document.activeElement !== input) input.value = players.length ? String(value) : '';
     $('cards-hint').textContent = players.length ? `Maximum ${max} (${cardIds.length} cartes pour ${players.length} participant${players.length > 1 ? 's' : ''})` : `${cardIds.length} cartes dans le paquet`;
     $('cards-minus').disabled = !players.length || value <= 1;
     $('cards-plus').disabled = !players.length || value >= max;
@@ -368,6 +371,21 @@ export async function startApp(gameStore, { deck }) {
   }
   $('cards-minus').addEventListener('click', () => changeCards(-1));
   $('cards-plus').addEventListener('click', () => changeCards(1));
+
+  /** Saisie au clavier : appliquée à la validation (Entrée) ou en quittant le champ, ramenée dans [1, maximum]. */
+  function commitCardsInput() {
+    if (!room?.meta) return;
+    const input = $('cards-value');
+    const max = maxCardsPerPlayer(cardIds.length, activePlayers(room).length);
+    if (!max) return;
+    const next = clampCardsPerPlayer(input.value.trim() === '' ? effectiveCardsPerPlayer(room, cardIds.length) : input.value, max);
+    input.value = String(next);
+    if (next !== effectiveCardsPerPlayer(room, cardIds.length) || room.meta.cardsPerPlayer !== next) gameStore.setCardsPerPlayer(code, next);
+  }
+  $('cards-value').addEventListener('change', commitCardsInput);
+  $('cards-value').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') { event.preventDefault(); commitCardsInput(); }
+  });
 
   $('launch').addEventListener('click', async () => {
     if (busy || !room) return;
@@ -431,15 +449,7 @@ export async function startApp(gameStore, { deck }) {
     // Carte
     const current = Math.min(total, played + (card && !turn.revealed ? 1 : 0)) || (total ? 1 : 0);
     $('card-meta').textContent = turn.done ? `${played} cartes jouées` : `Carte ${Math.max(current, 1)} sur ${total}`;
-    $('draw').hidden = !(isMine && !card);
-    if (card) {
-      setTypo($('card-text'), card.text);
-      $('card-text').classList.remove('is-placeholder');
-    } else {
-      $('card-text').textContent = turn.done ? 'Partie terminée : place aux résultats.'
-        : isMine ? 'Piochez votre carte.' : `${nameOf(turn.playerUid)} va piocher une carte…`;
-      $('card-text').classList.add('is-placeholder');
-    }
+    renderFlipCard(turn, card, isMine);
     const choosing = isMine && card && !turn.placement && !turn.revealed;
     const selection = choosing ? (localSelection ?? turn.selection ?? null) : (turn.placement ?? turn.selection ?? null);
     $('validate').hidden = !choosing;
@@ -448,6 +458,7 @@ export async function startApp(gameStore, { deck }) {
     if (choosing) hint = selection ? `Votre choix : ${REGION_LABELS[selection]}. Validez quand vous êtes sûr.` : 'Touchez une zone du diagramme, puis validez.';
     else if (card && !turn.revealed && turn.placement) hint = 'Correction en cours…';
     else if (card && !turn.revealed && selection) hint = `Hésite sur : ${REGION_LABELS[selection]}`;
+    else if (turn.done) hint = 'Partie terminée : place aux résultats.';
     else if (spectator) hint = 'Plus assez de cartes pour vous faire jouer : vous suivez la partie en spectateur.';
     $('card-hint').textContent = hint;
 
@@ -513,6 +524,32 @@ export async function startApp(gameStore, { deck }) {
     renderTimer();
   }
 
+  /**
+   * Carte face cachée, retournée quand le joueur actif la touche. L'animation n'est jouée que si cet écran
+   * a vu la carte face cachée : au chargement d'une carte déjà retournée, elle s'affiche directement.
+   */
+  let shownCardKey;          // undefined : premier rendu ; null : face cachée ; sinon tour et carte affichés
+  function renderFlipCard(turn, card, isMine) {
+    const flip = $('flip-card');
+    $('flip-card').closest('.card-stage').hidden = Boolean(turn.done);
+    const key = card ? `${turn.seq}:${turn.cardId}` : null;
+    if (key !== shownCardKey) {
+      const animate = shownCardKey === null && key !== null;
+      flip.classList.toggle('no-anim', !animate);
+      if (card) setTypo($('card-text'), card.text);
+      flip.classList.toggle('is-flipped', Boolean(card));
+      shownCardKey = key;
+      if (!animate) requestAnimationFrame(() => requestAnimationFrame(() => flip.classList.remove('no-anim')));
+    }
+    const canFlip = isMine && !card && !turn.done;
+    flip.disabled = !canFlip;
+    if (canFlip) flip.setAttribute('aria-label', 'Retourner la carte');
+    else flip.removeAttribute('aria-label');
+    $('back-hint').textContent = canFlip ? 'Touchez la carte pour la retourner' : `${nameOf(turn.playerUid)} va retourner la carte`;
+    $('flip-back').setAttribute('aria-hidden', String(Boolean(card)));
+    $('flip-front').setAttribute('aria-hidden', String(!card));
+  }
+
   function renderTimer() {
     const node = $('timer');
     const turn = room?.turn;
@@ -529,7 +566,9 @@ export async function startApp(gameStore, { deck }) {
     node.setAttribute('aria-label', `${left} secondes restantes`);
   }
 
-  $('draw').addEventListener('click', () => { if (room) gameStore.draw(code, room); });
+  $('flip-card').addEventListener('click', () => {
+    if (room?.turn?.playerUid === uid && !room.turn.cardId) gameStore.draw(code, room);
+  });
   $('validate').addEventListener('click', async () => {
     const selection = localSelection ?? room?.turn?.selection;
     if (!room || !selection) return;

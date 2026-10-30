@@ -19,8 +19,8 @@ Le paquet SHALL être un fichier JSON du site (`site/data/cards.json`). Chaque c
 ### Requirement: Verdict d'un placement
 Le verdict d'un placement SHALL être calculé à partir des ensembles d'accountabilities de la région choisie et de la bonne région :
 - « Juste » si la région choisie est la bonne région ; une carte dont la bonne région est le centre « Scrum Team » est donc juste seulement au centre ;
-- « Partiel » si les deux ensembles ont au moins une accountability en commun sans être identiques ;
-- « Faux » sinon, et en particulier dès que l'une des deux régions est la zone Piège et pas l'autre.
+- « Partiel » seulement si le choix est **incomplet** : les accountabilities de la région choisie sont toutes dans la bonne réponse, mais il en manque (par exemple Product Owner seul, ou Product Owner + Developers, pour une carte « Scrum Team ») ;
+- « Faux » sinon. En particulier, choisir plus de rôles que la bonne réponse MUST être « Faux » (une carte d'un seul rôle placée dans une intersection ou au centre), pour que placer toutes les cartes au centre ne rapporte pas de points ; et toujours « Faux » entre la zone Piège et un rôle.
 Une carte non placée à la fin du chrono SHALL avoir le verdict « Faux ».
 
 #### Scenario: Placement exact
@@ -36,7 +36,22 @@ Une carte non placée à la fin du chrono SHALL avoir le verdict « Faux ».
 #### Scenario: Responsabilité individuelle placée au centre
 - **GIVEN** la carte « Ordonner les éléments du Product Backlog », bonne région Product Owner
 - **WHEN** le joueur la place au centre « Scrum Team »
+- **THEN** le verdict est « Faux »
+
+#### Scenario: Responsabilité individuelle placée dans une intersection
+- **GIVEN** la carte « Ordonner les éléments du Product Backlog », bonne région Product Owner
+- **WHEN** le joueur la place dans Product Owner + Developers
+- **THEN** le verdict est « Faux »
+
+#### Scenario: Responsabilité partagée réduite à un rôle
+- **GIVEN** la carte « Définir le Sprint Goal », bonne région Scrum Team
+- **WHEN** le joueur la place dans Product Owner
 - **THEN** le verdict est « Partiel »
+
+#### Scenario: Intersections qui se recoupent
+- **GIVEN** la carte « Discuter des compromis lors du dimensionnement des éléments du Product Backlog », bonne région Product Owner + Developers
+- **WHEN** le joueur la place dans Product Owner + Scrum Master
+- **THEN** le verdict est « Faux », car Scrum Master est en trop
 
 #### Scenario: Piège attribué à un rôle
 - **GIVEN** la carte « Assigner les tâches aux Developers », bonne région Piège
@@ -62,7 +77,7 @@ Après chaque placement, la correction SHALL afficher la bonne région, le verdi
 - **THEN** la correction affiche l'explication générale et la référence au Scrum Guide
 
 #### Scenario: Affinage placé dans Product Owner + Developers
-- **GIVEN** la carte « Affiner le Product Backlog », bonne région Scrum Team
+- **GIVEN** la carte « Faire le refinement du Product Backlog », bonne région Scrum Team
 - **WHEN** le joueur la place dans Product Owner + Developers
 - **THEN** le verdict est « Partiel »
 

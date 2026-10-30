@@ -4,6 +4,7 @@
 export const MAX_PLAYERS = 10;
 export const ROOM_TTL_MS = 24 * 60 * 60 * 1000;
 export const TIMER_CHOICES = [0, 30, 45, 60];
+export const DEFAULT_CARDS_PER_PLAYER = 5;
 export const NAME_MAX = 20;
 export const CODE_LENGTH = 4;
 export const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ';
@@ -40,12 +41,19 @@ export function isRegion(value) {
   return REGIONS.includes(value);
 }
 
-/** Verdict d'un placement : égalité des ensembles → juste ; intersection non vide → partiel ; sinon faux. */
+/**
+ * Verdict d'un placement : région exacte → juste ; choix incomplet (rôles tous dans la bonne réponse,
+ * mais pas tous) → partiel ; sinon faux. Un rôle en trop est donc toujours faux : tout placer au centre
+ * ne rapporte rien.
+ */
 export function verdict(chosen, answer) {
   if (!isRegion(chosen) || !isRegion(answer)) return 'wrong';
   if (chosen === answer) return 'right';
   const answerSet = REGION_SETS[answer];
-  return REGION_SETS[chosen].some((role) => answerSet.includes(role)) ? 'partial' : 'wrong';
+  const chosenSet = REGION_SETS[chosen];
+  const incomplete = chosenSet.length > 0 && chosenSet.length < answerSet.length
+    && chosenSet.every((role) => answerSet.includes(role));
+  return incomplete ? 'partial' : 'wrong';
 }
 
 /** Explication à afficher : ciblée pour la région choisie si elle existe, toujours accompagnée de l'explication générale. */
@@ -128,12 +136,12 @@ export function maxCardsPerPlayer(deckSize, playerCount) {
   return Math.floor(deckSize / playerCount);
 }
 
-/** Ramène un réglage dans les bornes [1, maximum]. */
+/** Ramène un réglage dans les bornes [1, maximum] ; une valeur illisible donne la valeur par défaut. */
 export function clampCardsPerPlayer(value, max) {
   if (max <= 0) return 0;
   const n = Math.floor(Number(value));
-  if (!Number.isFinite(n) || n < 1) return max;
-  return Math.min(n, max);
+  if (value === null || value === undefined || value === '' || !Number.isFinite(n)) return Math.min(DEFAULT_CARDS_PER_PLAYER, max);
+  return Math.min(Math.max(n, 1), max);
 }
 
 /** Mélange de Fisher-Yates (copie). */

@@ -98,7 +98,7 @@
             <span class="setting-label" id="cards-label">Cartes par personne</span>
             <div class="stepper" role="group" aria-labelledby="cards-label">
               <button type="button" class="stepper-button" id="cards-minus" aria-label="Une carte de moins">−</button>
-              <output class="stepper-value" id="cards-value" aria-live="polite"></output>
+              <input class="stepper-value" id="cards-value" type="number" inputmode="numeric" min="1" step="1" aria-labelledby="cards-label" aria-describedby="cards-hint">
               <button type="button" class="stepper-button" id="cards-plus" aria-label="Une carte de plus">+</button>
             </div>
             <span class="setting-hint" id="cards-hint"></span>
@@ -135,8 +135,20 @@
       <div class="game-side">
         <section class="panel card-panel" id="card-panel" aria-live="polite">
           <p class="card-meta" id="card-meta"></p>
-          <p class="card-text" id="card-text"></p>
-          <button type="button" class="button button-primary button-large" id="draw" hidden>Piocher une carte</button>
+          <div class="card-stage">
+            <button type="button" class="flip-card" id="flip-card" disabled>
+              <span class="flip-inner">
+                <span class="flip-face flip-back" id="flip-back">
+                  <span class="back-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+                  <span class="back-title">Rôles et responsabilités</span>
+                  <span class="back-hint" id="back-hint"></span>
+                </span>
+                <span class="flip-face flip-front" id="flip-front" aria-hidden="true">
+                  <span class="card-text" id="card-text"></span>
+                </span>
+              </span>
+            </button>
+          </div>
           <p class="hint" id="card-hint"></p>
           <button type="button" class="button button-primary button-large" id="validate" hidden disabled>Valider</button>
         </section>

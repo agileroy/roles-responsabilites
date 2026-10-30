@@ -29,7 +29,7 @@ Dépôt neuf, sur le modèle de `poker-planning` : site statique vanilla en modu
 
 - **Diagramme de Venn en SVG** : trois cercles de rayon 170 (repère 640 × 660) disposés en triangle, zone « Piège » en bandeau sous les cercles. Pas de cadre « Scrum Team » autour des cercles, décidé pendant l'implémentation : il faisait doublon avec le centre, qui porte ce nom. Chaque région est dessinée par intersection de `clipPath` et exclusion par masque, pour la colorer ; la région touchée est calculée géométriquement à partir du point (appartenance aux cercles), car les masques n'arrêtent pas les clics. Chaque région est aussi focalisable au clavier (Entrée ou Espace). Écartement choisi pour que la plus petite région (PO + SM) garde un cercle inscrit de 108 unités, soit environ 55 px sur un téléphone de 360 px. Alternative écartée : boutons de régions sous un Venn décoratif, moins parlant pour le débrief.
 
-- **Régions et verdict** : chaque région est associée à un ensemble (`po` → {PO}, `po-dev` → {PO, Dev}, `team` → {PO, SM, Dev}, `trap` → {}). Le verdict compare les ensembles : égalité → juste ; intersection non vide → partiel ; sinon faux. La zone Piège, ensemble vide, donne donc « faux » face à toute autre région. Cette règle unique couvre aussi le centre : « PO » pour une carte « Scrum Team » est partiel.
+- **Régions et verdict** : chaque région est associée à un ensemble (`po` → {PO}, `po-dev` → {PO, Dev}, `team` → {PO, SM, Dev}, `trap` → {}). Le verdict compare les ensembles : égalité → juste ; choix inclus strictement dans la bonne réponse (non vide) → partiel ; sinon faux. Choisir des rôles en trop est donc toujours faux, ce qui empêche de tout placer au centre pour marquer des points (retour de la partie de test du 30 octobre : la première règle, « au moins un rôle commun → partiel », rapportait environ 50 % en plaçant toutes les cartes au centre). La zone Piège, ensemble vide, n'est jamais un choix partiel.
 
 - **Modèle de données** (sous `/rolesGame`) :
   - `rooms/{code}/meta` : `{ hostUid, createdAt, status: 'lobby' | 'playing' | 'finished', cardsPerPlayer, timerSeconds, deckOrder, playerOrder }`. `deckOrder` est la liste mélangée des identifiants de cartes, `playerOrder` la liste des `uid` dans l'ordre de passage, tous deux écrits par le formateur au lancement (les retardataires sont ajoutés à la fin de `playerOrder`) ;
@@ -56,6 +56,10 @@ Dépôt neuf, sur le modèle de `poker-planning` : site statique vanilla en modu
 - **Code de salle** : 4 lettres tirées dans un alphabet sans lettres ambiguës (`ABCDEFGHJKMNPQRSTUVWXYZ`), réservé par une écriture sur `expiry/{code}` que les règles refusent si le code existe déjà ; en cas de refus, un nouveau tirage.
 
 - **Hasard** : `crypto.getRandomValues` pour le mélange (Fisher-Yates), l'ordre de passage et le code. `game-core.js` reçoit la fonction aléatoire en paramètre pour être testable.
+
+- **Carte face cachée** : une seule carte (`button`) à deux faces en CSS 3D (`transform: rotateY`, `backface-visibility: hidden`). Elle est retournée quand `turn.cardId` apparaît, donc en même temps sur tous les écrans ; à l'arrivée sur une carte déjà retournée (rechargement), elle s'affiche sans animation. La face inactive porte `aria-hidden`, et `prefers-reduced-motion` supprime la rotation.
+
+- **Réglage du nombre de cartes** : champ numérique (`inputmode="numeric"`) entre les boutons − et + ; la valeur n'est écrite qu'à la validation (Entrée ou sortie du champ), ramenée dans [1, maximum], et le rendu ne remplace pas la saisie en cours.
 
 - **Paquet et relecture** : `site/data/cards.json` chargé par `fetch` au démarrage ; `tests/cards.test.mjs` valide son format ; `tools/cards-review.mjs` génère `docs/cartes.md` pour la relecture.
 

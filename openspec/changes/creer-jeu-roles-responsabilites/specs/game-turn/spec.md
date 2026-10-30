@@ -9,12 +9,17 @@
 - **THEN** le téléphone de Julie affiche « À vous de jouer ! », et l'écran projeté et les téléphones de Marc et Inès affichent « À Julie de jouer »
 
 ### Requirement: Pioche
-Le joueur actif SHALL piocher sa carte d'un geste (« Piocher une carte ») sur son téléphone. La carte SHALL être la suivante du paquet mélangé et s'afficher en même temps sur l'écran projeté et sur tous les téléphones.
+Avant la pioche, tous les écrans SHALL montrer une carte face cachée. Le joueur actif SHALL piocher en touchant cette carte sur son téléphone (accessible aussi au clavier, avec le libellé « Retourner la carte ») ; pour les autres, la carte face cachée MUST NOT être cliquable. La carte piochée SHALL être la suivante du paquet mélangé, et elle SHALL se retourner avec une animation en même temps sur l'écran projeté et sur tous les téléphones. Si l'utilisateur a demandé de réduire les animations, la carte SHALL s'afficher directement, sans rotation.
 
-#### Scenario: Carte piochée
+#### Scenario: Carte retournée
+- **GIVEN** Julie, joueuse active, devant la carte face cachée
+- **WHEN** elle touche la carte
+- **THEN** la carte se retourne et « Ordonner les éléments du Product Backlog » s'affiche sur tous les écrans
+
+#### Scenario: Carte d'un autre joueur
 - **GIVEN** Julie, joueuse active
-- **WHEN** elle touche « Piocher une carte »
-- **THEN** la carte « Ordonner les éléments du Product Backlog » s'affiche sur tous les écrans
+- **WHEN** Marc touche la carte face cachée sur son téléphone
+- **THEN** rien ne se passe, et la carte indique « Julie va retourner la carte »
 
 ### Requirement: Placement dans le Venn
 Le joueur actif SHALL choisir une région en la touchant sur le diagramme de Venn de son téléphone ; la région choisie SHALL être mise en évidence, et il SHALL pouvoir changer d'avis tant qu'il n'a pas confirmé. Chaque région SHALL offrir une zone tactile d'au moins 44 × 44 px sur un écran de 360 px de large. Un bouton « Valider » SHALL confirmer le placement ; le placement validé MUST être définitif. Seul le joueur actif MUST pouvoir placer la carte, y compris du point de vue des règles de sécurité de la base. Avant la validation, l'écran projeté et les autres téléphones SHALL afficher la région en cours de sélection, pour que tout le monde suive son hésitation.

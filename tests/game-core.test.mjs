@@ -14,11 +14,23 @@ test('verdict : placement exact', () => {
   assert.equal(verdict('trap', 'trap'), 'right');
 });
 
-test('verdict : placement incomplet ou trop large est partiel', () => {
+test('verdict : un choix incomplet est partiel', () => {
   assert.equal(verdict('po', 'po-dev'), 'partial');
+  assert.equal(verdict('dev', 'po-dev'), 'partial');
   assert.equal(verdict('po', 'team'), 'partial');      // carte Scrum Team placée dans un seul rôle
-  assert.equal(verdict('team', 'po'), 'partial');      // carte d'un seul rôle placée au centre
   assert.equal(verdict('po-dev', 'team'), 'partial');  // refinement placé en PO + Developers
+  assert.equal(verdict('sm', 'po-sm'), 'partial');
+});
+
+test('verdict : un rôle en trop est faux', () => {
+  assert.equal(verdict('team', 'po'), 'wrong');        // carte d'un seul rôle placée au centre
+  assert.equal(verdict('po-dev', 'po'), 'wrong');      // carte d'un seul rôle placée dans une intersection
+  assert.equal(verdict('team', 'po-dev'), 'wrong');
+  assert.equal(verdict('po-sm', 'po-dev'), 'wrong');   // intersections qui se recoupent
+});
+
+test('verdict : tout placer au centre ne rapporte que les cartes Scrum Team', () => {
+  for (const answer of REGIONS) assert.equal(verdict('team', answer), answer === 'team' ? 'right' : 'wrong', answer);
 });
 
 test('verdict : aucune accountability commune est faux', () => {
@@ -38,8 +50,10 @@ test('verdict : carte non placée (temps écoulé) ou région inconnue', () => {
   assert.equal(verdict('chef', 'po'), 'wrong');
 });
 
-test('verdict : combinaisons symétriques', () => {
-  for (const a of REGIONS) for (const b of REGIONS) assert.equal(verdict(a, b), verdict(b, a), `${a} / ${b}`);
+test('verdict : jamais partiel dans les deux sens', () => {
+  for (const a of REGIONS) for (const b of REGIONS) {
+    if (verdict(a, b) === 'partial') assert.equal(verdict(b, a), 'wrong', `${a} / ${b}`);
+  }
 });
 
 // ---------------------------------------------------------------- Explication et typographie
@@ -115,10 +129,15 @@ test('maximum de cartes par personne', () => {
   assert.equal(maxCardsPerPlayer(67, 7), 9);
 });
 
-test('réglage ramené au nouveau maximum à l\'arrivée d\'un participant', () => {
+test('réglage : 5 par défaut, ramené dans [1, maximum]', () => {
+  assert.equal(clampCardsPerPlayer(null, maxCardsPerPlayer(67, 4)), 5);
+  assert.equal(clampCardsPerPlayer(undefined, maxCardsPerPlayer(67, 10)), 5);
+  assert.equal(clampCardsPerPlayer(null, 3), 3);              // maximum plus petit que 5
   assert.equal(clampCardsPerPlayer(9, maxCardsPerPlayer(67, 8)), 8);
-  assert.equal(clampCardsPerPlayer(3, 8), 3);
-  assert.equal(clampCardsPerPlayer(0, 8), 8);
+  assert.equal(clampCardsPerPlayer('12', 16), 12);            // saisie au clavier
+  assert.equal(clampCardsPerPlayer('40', 16), 16);
+  assert.equal(clampCardsPerPlayer('0', 16), 1);
+  assert.equal(clampCardsPerPlayer('abc', 16), 5);
 });
 
 test('mélange : même contenu, ordre déterministe avec un aléa fixé', () => {

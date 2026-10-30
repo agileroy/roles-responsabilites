@@ -20,10 +20,10 @@ export function isConnected(player) {
   return Boolean(player?.connections && Object.keys(player.connections).length);
 }
 
-/** Nombre de cartes par personne effectivement appliqué (réglage, ou maximum par défaut). */
+/** Nombre de cartes par personne effectivement appliqué (réglage, ou 5 par défaut, dans la limite du maximum). */
 export function effectiveCardsPerPlayer(room, deckSize) {
   const max = maxCardsPerPlayer(deckSize, activePlayers(room).length);
-  return clampCardsPerPlayer(room?.meta?.cardsPerPlayer ?? max, max);
+  return clampCardsPerPlayer(room?.meta?.cardsPerPlayer ?? null, max);
 }
 
 /** Message d'erreur si l'on ne peut pas rejoindre cette salle, null sinon. */

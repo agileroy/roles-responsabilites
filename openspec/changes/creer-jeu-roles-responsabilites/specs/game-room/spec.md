@@ -37,12 +37,27 @@ L'écran du formateur SHALL afficher en grand le code de la salle, un QR code de
 - **THEN** le message « Aucune partie avec ce code » s'affiche
 
 ### Requirement: Réglages de la partie
-Avant le lancement, le formateur SHALL choisir le nombre de cartes par personne et le chrono (sans chrono, 30, 45 ou 60 secondes ; sans chrono par défaut). Le nombre de cartes par personne SHALL aller de 1 au maximum possible, égal au nombre de cartes du paquet divisé par le nombre de participants, arrondi à l'entier inférieur ; il SHALL valoir ce maximum par défaut et être ramené au nouveau maximum si un participant arrive. Le bouton « Lancer la partie » SHALL être désactivé tant qu'aucun participant n'est présent.
+Avant le lancement, le formateur SHALL choisir le nombre de cartes par personne et le chrono (sans chrono, 30, 45 ou 60 secondes ; sans chrono par défaut). Le nombre de cartes par personne SHALL aller de 1 au maximum possible, égal au nombre de cartes du paquet divisé par le nombre de participants, arrondi à l'entier inférieur ; il SHALL valoir 5 par défaut (ou le maximum s'il est plus petit) et être ramené au nouveau maximum si un participant arrive. Le formateur SHALL pouvoir le changer avec les boutons − et +, ou en saisissant le nombre au clavier : la saisie est appliquée quand il valide (Entrée) ou quitte le champ, et une valeur hors bornes est ramenée dans [1, maximum]. Le bouton « Lancer la partie » SHALL être désactivé tant qu'aucun participant n'est présent.
 
-#### Scenario: Maximum proposé
+#### Scenario: Valeur par défaut
+- **GIVEN** un paquet de 67 cartes et 4 participants présents
+- **WHEN** le formateur ouvre les réglages
+- **THEN** le nombre de cartes par personne vaut 5, avec un maximum de 16
+
+#### Scenario: Maximum
 - **GIVEN** un paquet de 67 cartes et 10 participants présents
 - **WHEN** le formateur ouvre les réglages
-- **THEN** le nombre de cartes par personne vaut 6 et ne peut pas dépasser 6
+- **THEN** le nombre de cartes par personne vaut 5 et ne peut pas dépasser 6
+
+#### Scenario: Saisie au clavier
+- **GIVEN** un paquet de 67 cartes et 4 participants présents
+- **WHEN** le formateur saisit 12 dans le champ puis appuie sur Entrée
+- **THEN** le nombre de cartes par personne vaut 12 pour tout le monde
+
+#### Scenario: Saisie hors bornes
+- **GIVEN** un paquet de 67 cartes et 4 participants présents
+- **WHEN** le formateur saisit 40 puis quitte le champ
+- **THEN** le nombre de cartes par personne est ramené à 16
 
 #### Scenario: Ajustement à l'arrivée d'un participant
 - **GIVEN** un paquet de 67 cartes, 7 participants et le réglage à 9 cartes par personne

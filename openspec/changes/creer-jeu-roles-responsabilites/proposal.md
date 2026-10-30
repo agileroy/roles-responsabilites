@@ -6,8 +6,8 @@ En formation PSM et PSPO, les confusions sur les accountabilities de Scrum sont 
 
 - Un **formateur** crée une partie depuis l'écran projeté : il obtient un **code de salle** à 4 lettres et un **QR code**. Il anime la partie mais ne joue pas.
 - Les **participants** (10 au maximum) rejoignent depuis leur téléphone avec le QR code ou le code, et saisissent un prénom unique dans la salle. Pas de compte.
-- Le formateur règle le **nombre de cartes par personne** (le maximum possible est proposé) et un **chrono** facultatif (30, 45 ou 60 secondes), puis lance la partie.
-- **Tour par tour**, le jeu désigne le joueur actif, qui pioche une carte de responsabilité. Il la place sur son téléphone dans une région d'un **diagramme de Venn** : Product Owner, Scrum Master, Developers, leurs intersections, le centre (Scrum Team), ou la zone **Piège** (responsabilité qui n'existe pas dans Scrum). Tout le monde voit son choix en direct.
+- Le formateur règle le **nombre de cartes par personne** (5 par défaut, au clavier ou avec − et +, dans la limite du maximum possible) et un **chrono** facultatif (30, 45 ou 60 secondes), puis lance la partie.
+- **Tour par tour**, le jeu désigne le joueur actif, qui retourne une carte de responsabilité face cachée. Il la place sur son téléphone dans une région d'un **diagramme de Venn** : Product Owner, Scrum Master, Developers, leurs intersections, le centre (Scrum Team), ou la zone **Piège** (responsabilité qui n'existe pas dans Scrum). Tout le monde voit son choix en direct.
 - **Correction immédiate** pour toute la salle : juste, partiel ou faux, avec une explication fondée sur le Scrum Guide 2020, ciblée selon l'erreur commise. Le formateur passe à la carte suivante quand la discussion est terminée.
 - **Arrivée tardive** possible : le retardataire pioche autant de cartes qu'il en reste aux autres participants.
 - **Fin de partie** : score collectif, podium des trois meilleurs pourcentages de bonnes réponses, récapitulatif des erreurs avec leurs explications.

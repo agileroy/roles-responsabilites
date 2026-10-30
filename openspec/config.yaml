@@ -1,0 +1,30 @@
+schema: spec-driven
+
+# Project context: constraints an agent cannot infer from the code.
+context: |
+  Rédiger tous les artefacts OpenSpec (proposal, design, specs, tasks) en français.
+  Jeu de formation PSM / PSPO « Rôles et responsabilités » : les participants placent des cartes de
+  responsabilités dans un diagramme de Venn (Product Owner, Scrum Master, Developers, intersections,
+  centre = Scrum Team) ou dans une zone « Piège » pour les responsabilités qui n'existent pas dans Scrum.
+  Vocabulaire du Scrum Guide 2020 : « accountabilities », Product Owner, Scrum Master, Developers, Scrum Team.
+  Chaque explication de carte s'appuie sur le Scrum Guide 2020 ; le paquet de cartes est un fichier JSON
+  du dépôt (site/data/cards.json), relu et validé par l'auteur.
+  Déroulé collectif en temps réel : un formateur (qui ne joue pas) anime depuis un écran projeté ;
+  les participants (10 au maximum) rejoignent depuis leur téléphone avec un code de salle ou un QR code,
+  jouent chacun leur tour, et tout le monde voit le choix du joueur actif et la correction de chaque carte.
+  Hébergement : site statique sur GitHub Pages (https://agileroy.github.io/roles-responsabilites/), sans serveur à maintenir.
+  Temps réel : Firebase Realtime Database (offre gratuite, connexion anonyme), projet partagé avec
+  poker-planning, matrice-competences, wheel-of-chance et moving-motivators : database.rules.json doit rester
+  identique dans les cinq dépôts ; ce jeu n'utilise que la branche `rolesGame`.
+  Aucun autre service tiers. N'utiliser que HTTPS (port 443), pas de connexion directe entre navigateurs (WebRTC).
+  Le VPN de l'entreprise (proxy Zscaler) bloque GitHub Pages et Firebase : le jeu se joue hors VPN,
+  et les participants bloqués rejoignent depuis leur téléphone via le QR code.
+  Pas de serveur pour le ménage : les salles de plus de 24 heures sont supprimées par les navigateurs,
+  dans la limite autorisée par les règles de sécurité.
+  Stack : HTML/CSS/JavaScript vanilla en modules ES, sans framework ni étape de build (dossier site/),
+  comme poker-planning. Architecture : site/js/game-core.js contient la logique métier pure (sans DOM ni Firebase) ;
+  site/js/room-store.js est le seul module qui parle à Firebase ; site/js/ui.js gère l'interface.
+  Les règles de sécurité Firebase (database.rules.json) doivent appliquer les mêmes contraintes que l'interface.
+  Interface en français, sans compte.
+  Tests : lanceur intégré de Node.js (npm test), à faire évoluer avec chaque changement de comportement ;
+  la publication GitHub Actions est bloquée si un test échoue.

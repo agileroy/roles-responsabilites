@@ -1,0 +1,646 @@
+{
+  "version": 1,
+  "source": "Scrum Guide 2020 (Ken Schwaber et Jeff Sutherland)",
+  "regions": {
+    "po": "Product Owner",
+    "sm": "Scrum Master",
+    "dev": "Developers",
+    "po-sm": "Product Owner + Scrum Master",
+    "po-dev": "Product Owner + Developers",
+    "sm-dev": "Scrum Master + Developers",
+    "team": "Scrum Team",
+    "trap": "Piège"
+  },
+  "cards": [
+    {
+      "id": "po-01",
+      "text": "Développer et communiquer explicitement le Product Goal",
+      "answer": "po",
+      "explanation": "Le Scrum Guide place cette responsabilité en tête de la liste de celles du Product Owner, qui est redevable (accountable) d'une gestion efficace du Product Backlog.",
+      "reference": "Product Owner",
+      "errors": {
+        "team": "La Scrum Team travaille vers le Product Goal, mais c'est le Product Owner qui le développe et le communique.",
+        "sm": "Le Scrum Master aide à trouver des techniques pour définir efficacement le Product Goal, mais il ne le définit pas."
+      }
+    },
+    {
+      "id": "po-02",
+      "text": "Créer et communiquer clairement les éléments du Product Backlog",
+      "answer": "po",
+      "explanation": "C'est une responsabilité du Product Owner. Il peut faire ce travail lui-même ou le déléguer, mais il en reste redevable.",
+      "reference": "Product Owner",
+      "errors": {
+        "po-dev": "Les Developers peuvent aider à rédiger des éléments si le PO leur délègue ce travail, mais le PO en reste seul redevable.",
+        "dev": "Les Developers peuvent contribuer si le PO le leur délègue, mais le PO en reste seul redevable."
+      }
+    },
+    {
+      "id": "po-03",
+      "text": "Ordonner les éléments du Product Backlog",
+      "answer": "po",
+      "explanation": "L'ordre du Product Backlog relève du Product Owner. Quiconque veut le modifier doit convaincre le Product Owner.",
+      "reference": "Product Owner",
+      "errors": {
+        "team": "La Scrum Team peut donner son avis, mais l'ordre du Product Backlog est une décision du Product Owner.",
+        "po-dev": "Les Developers éclairent le PO (dépendances, risques techniques), mais l'ordre reste la décision du Product Owner."
+      }
+    },
+    {
+      "id": "po-04",
+      "text": "S'assurer que le Product Backlog est transparent, visible et compris",
+      "answer": "po",
+      "explanation": "Le Scrum Guide l'attribue explicitement au Product Owner, dans le cadre de la gestion efficace du Product Backlog.",
+      "reference": "Product Owner",
+      "errors": {
+        "sm": "Le Scrum Master aide la Scrum Team à comprendre le besoin d'éléments clairs et concis, mais la transparence du Product Backlog relève du Product Owner."
+      }
+    },
+    {
+      "id": "po-05",
+      "text": "Maximiser la valeur du produit résultant du travail de la Scrum Team",
+      "answer": "po",
+      "explanation": "C'est la définition même de la redevabilité du Product Owner dans le Scrum Guide.",
+      "reference": "Product Owner",
+      "errors": {
+        "team": "Toute la Scrum Team crée de la valeur, mais la maximisation de la valeur du produit est la redevabilité propre du Product Owner."
+      }
+    },
+    {
+      "id": "po-06",
+      "text": "Annuler le Sprint si le Sprint Goal devient obsolète",
+      "answer": "po",
+      "explanation": "Seul le Product Owner a l'autorité d'annuler un Sprint.",
+      "reference": "Le Sprint",
+      "errors": {
+        "sm": "Le Scrum Master n'a pas l'autorité d'annuler un Sprint : seul le Product Owner l'a.",
+        "team": "La Scrum Team peut en discuter, mais seul le Product Owner a l'autorité d'annuler un Sprint.",
+        "trap": "Ce n'est pas un piège : un Sprint peut être annulé si son Sprint Goal devient obsolète, et seul le Product Owner en a l'autorité."
+      }
+    },
+    {
+      "id": "po-07",
+      "text": "Représenter les besoins des nombreuses parties prenantes dans le Product Backlog",
+      "answer": "po",
+      "explanation": "Le Product Owner est une seule personne, pas un comité, et représente les besoins des parties prenantes dans le Product Backlog.",
+      "reference": "Product Owner",
+      "errors": {
+        "sm": "Le Scrum Master facilite la collaboration avec les parties prenantes, mais c'est le Product Owner qui représente leurs besoins dans le Product Backlog."
+      }
+    },
+    {
+      "id": "po-08",
+      "text": "Proposer, en Sprint Planning, comment le produit pourrait augmenter sa valeur et son utilité durant le Sprint",
+      "answer": "po",
+      "explanation": "Lors du premier sujet du Sprint Planning, le Product Owner fait cette proposition ; ensuite, toute la Scrum Team définit le Sprint Goal.",
+      "reference": "Sprint Planning",
+      "errors": {
+        "team": "La Scrum Team définit ensuite le Sprint Goal ensemble, mais la proposition de départ vient du Product Owner."
+      }
+    },
+    {
+      "id": "po-09",
+      "text": "Arbitrer les demandes des parties prenantes qui veulent faire modifier le Product Backlog",
+      "answer": "po",
+      "explanation": "Pour que le Product Owner réussisse, toute l'organisation doit respecter ses décisions. Les personnes qui veulent changer le Product Backlog doivent convaincre le Product Owner.",
+      "reference": "Product Owner",
+      "errors": {
+        "sm": "Le Scrum Master peut faciliter ces échanges, mais la décision sur le Product Backlog revient au Product Owner."
+      }
+    },
+    {
+      "id": "po-10",
+      "text": "Rester redevable (accountable) du Product Backlog, même en déléguant une partie du travail",
+      "answer": "po",
+      "explanation": "Le Product Owner peut confier certaines tâches de gestion du Product Backlog à d'autres, mais il en reste redevable.",
+      "reference": "Product Owner",
+      "errors": {
+        "po-dev": "Les Developers peuvent recevoir une partie du travail délégué, mais la redevabilité ne se délègue pas : elle reste au Product Owner."
+      }
+    },
+    {
+      "id": "sm-01",
+      "text": "Être redevable (accountable) de l'efficacité de la Scrum Team",
+      "answer": "sm",
+      "explanation": "Le Scrum Guide l'écrit explicitement : le Scrum Master est redevable de l'efficacité de la Scrum Team, en lui permettant d'améliorer ses pratiques dans le cadre de Scrum.",
+      "reference": "Scrum Master",
+      "errors": {
+        "team": "La Scrum Team améliore son efficacité, notamment en Sprint Retrospective, mais la redevabilité de cette efficacité est celle du Scrum Master."
+      }
+    },
+    {
+      "id": "sm-02",
+      "text": "Établir Scrum tel que défini dans le Scrum Guide, en aidant chacun à en comprendre la théorie et la pratique",
+      "answer": "sm",
+      "explanation": "C'est la première phrase qui décrit le Scrum Master dans le Scrum Guide, aussi bien pour la Scrum Team que pour l'organisation.",
+      "reference": "Scrum Master",
+      "errors": {}
+    },
+    {
+      "id": "sm-03",
+      "text": "Coacher les membres de l'équipe en auto-gestion et en pluridisciplinarité",
+      "answer": "sm",
+      "explanation": "C'est l'un des services que le Scrum Master rend à la Scrum Team.",
+      "reference": "Scrum Master",
+      "errors": {
+        "team": "La Scrum Team est auto-gérée et pluridisciplinaire, mais c'est le Scrum Master qui coache ses membres pour y parvenir."
+      }
+    },
+    {
+      "id": "sm-04",
+      "text": "Provoquer la suppression des obstacles qui freinent les progrès de la Scrum Team",
+      "answer": "sm",
+      "explanation": "Le Scrum Master fait en sorte que les obstacles soient supprimés. Il ne les résout pas forcément lui-même : il s'assure que c'est fait.",
+      "reference": "Scrum Master",
+      "errors": {
+        "dev": "Les Developers soulèvent les obstacles, souvent au Daily Scrum, et peuvent en lever eux-mêmes, mais c'est le Scrum Master qui est chargé de provoquer leur suppression.",
+        "sm-dev": "Les Developers soulèvent les obstacles et peuvent en lever eux-mêmes, mais c'est le Scrum Master qui est chargé de provoquer leur suppression."
+      }
+    },
+    {
+      "id": "sm-05",
+      "text": "S'assurer que tous les événements Scrum ont lieu, sont positifs, productifs et respectent leur timebox",
+      "answer": "sm",
+      "explanation": "C'est un service du Scrum Master à la Scrum Team. Il veille à ce que les événements aient lieu, sans forcément les animer.",
+      "reference": "Scrum Master",
+      "errors": {
+        "team": "Toute la Scrum Team participe aux événements, mais c'est le Scrum Master qui s'assure qu'ils ont lieu et qu'ils sont productifs."
+      }
+    },
+    {
+      "id": "sm-06",
+      "text": "Aider à trouver des techniques pour définir efficacement le Product Goal et gérer le Product Backlog",
+      "answer": "sm",
+      "explanation": "C'est un service du Scrum Master au Product Owner : il aide, mais le Product Goal et le Product Backlog restent la responsabilité du Product Owner.",
+      "reference": "Scrum Master",
+      "errors": {
+        "po": "Le Product Owner définit le Product Goal et gère le Product Backlog ; le Scrum Master, lui, l'aide à trouver des techniques pour le faire efficacement.",
+        "po-sm": "Le Product Owner applique ces techniques, mais la carte décrit l'aide apportée : c'est un service du Scrum Master au Product Owner."
+      }
+    },
+    {
+      "id": "sm-07",
+      "text": "Faciliter la collaboration avec les parties prenantes, selon les demandes ou les besoins",
+      "answer": "sm",
+      "explanation": "Le Scrum Master facilite la collaboration avec les parties prenantes à la demande ou selon les besoins, au service du Product Owner.",
+      "reference": "Scrum Master",
+      "errors": {
+        "po": "Le Product Owner travaille avec les parties prenantes, mais c'est le Scrum Master qui facilite cette collaboration quand c'est demandé ou nécessaire."
+      }
+    },
+    {
+      "id": "sm-08",
+      "text": "Mener, former et coacher l'organisation dans son adoption de Scrum",
+      "answer": "sm",
+      "explanation": "C'est le premier service que le Scrum Master rend à l'organisation.",
+      "reference": "Scrum Master",
+      "errors": {
+        "trap": "Ce n'est pas un piège : le Scrum Guide confie explicitement ce rôle de leader au Scrum Master, au service de l'organisation."
+      }
+    },
+    {
+      "id": "sm-09",
+      "text": "Planifier et conseiller les implémentations de Scrum au sein de l'organisation",
+      "answer": "sm",
+      "explanation": "C'est l'un des services que le Scrum Master rend à l'organisation.",
+      "reference": "Scrum Master",
+      "errors": {}
+    },
+    {
+      "id": "sm-10",
+      "text": "Aider les employés et les parties prenantes à comprendre et à appliquer une approche empirique pour les travaux complexes",
+      "answer": "sm",
+      "explanation": "C'est l'un des services que le Scrum Master rend à l'organisation.",
+      "reference": "Scrum Master",
+      "errors": {}
+    },
+    {
+      "id": "sm-11",
+      "text": "Supprimer les barrières entre les parties prenantes et les Scrum Teams",
+      "answer": "sm",
+      "explanation": "C'est l'un des services que le Scrum Master rend à l'organisation.",
+      "reference": "Scrum Master",
+      "errors": {
+        "po": "Le Product Owner travaille avec les parties prenantes, mais supprimer les barrières entre elles et les Scrum Teams est un service du Scrum Master à l'organisation."
+      }
+    },
+    {
+      "id": "sm-12",
+      "text": "Aider la Scrum Team à se concentrer sur la création d'Increments de grande valeur qui respectent la Definition of Done",
+      "answer": "sm",
+      "explanation": "C'est l'un des services que le Scrum Master rend à la Scrum Team.",
+      "reference": "Scrum Master",
+      "errors": {
+        "dev": "Les Developers créent les Increments et respectent la Definition of Done, mais la carte décrit l'aide à la concentration : c'est un service du Scrum Master.",
+        "po": "Le Product Owner maximise la valeur, mais aider l'équipe à rester concentrée sur des Increments de valeur est un service du Scrum Master."
+      }
+    },
+    {
+      "id": "sm-13",
+      "text": "Aider la Scrum Team à comprendre la nécessité d'éléments de Product Backlog clairs et concis",
+      "answer": "sm",
+      "explanation": "C'est un service du Scrum Master au Product Owner. Rédiger des éléments clairs reste une responsabilité du Product Owner.",
+      "reference": "Scrum Master",
+      "errors": {
+        "po": "Le Product Owner crée et communique clairement les éléments ; le Scrum Master, lui, aide l'équipe à comprendre pourquoi ils doivent être clairs et concis."
+      }
+    },
+    {
+      "id": "dev-01",
+      "text": "Créer le plan du Sprint, le Sprint Backlog",
+      "answer": "dev",
+      "explanation": "Le Scrum Guide l'attribue explicitement aux Developers.",
+      "reference": "Developers",
+      "errors": {
+        "sm": "Le Scrum Master ne planifie pas le Sprint à la place des Developers.",
+        "team": "Le Sprint Goal est défini par toute la Scrum Team, mais le Sprint Backlog est le plan des Developers, par les Developers."
+      }
+    },
+    {
+      "id": "dev-02",
+      "text": "Inculquer la qualité en respectant la Definition of Done",
+      "answer": "dev",
+      "explanation": "Le Scrum Guide l'attribue explicitement aux Developers : ils sont tenus de se conformer à la Definition of Done.",
+      "reference": "Developers",
+      "errors": {
+        "sm": "Le Scrum Master aide l'équipe à se concentrer sur des Increments qui respectent la Definition of Done, mais ce sont les Developers qui inculquent la qualité.",
+        "po": "Le Product Owner ne contrôle pas la qualité : ce sont les Developers qui respectent la Definition of Done."
+      }
+    },
+    {
+      "id": "dev-03",
+      "text": "Adapter leur plan chaque jour en vue d'atteindre le Sprint Goal",
+      "answer": "dev",
+      "explanation": "Le Scrum Guide l'attribue explicitement aux Developers, notamment lors du Daily Scrum.",
+      "reference": "Developers",
+      "errors": {
+        "sm": "Le Scrum Master ne replanifie pas le travail des Developers."
+      }
+    },
+    {
+      "id": "dev-04",
+      "text": "Se tenir mutuellement responsables en tant que professionnels",
+      "answer": "dev",
+      "explanation": "Le Scrum Guide l'attribue explicitement aux Developers.",
+      "reference": "Developers",
+      "errors": {
+        "sm": "Le Scrum Master n'est pas un manager qui contrôle chacun : les Developers se tiennent mutuellement responsables.",
+        "team": "Le Scrum Guide formule cette responsabilité pour les Developers, entre eux, en tant que professionnels."
+      }
+    },
+    {
+      "id": "dev-05",
+      "text": "Sélectionner, en Sprint Planning, les éléments du Product Backlog à inclure dans le Sprint",
+      "answer": "dev",
+      "explanation": "En discutant avec le Product Owner, ce sont les Developers qui sélectionnent les éléments : ils savent ce qu'ils peuvent réaliser.",
+      "reference": "Sprint Planning",
+      "errors": {
+        "po": "Le Product Owner ordonne le Product Backlog et propose, mais ce sont les Developers qui sélectionnent ce qu'ils prennent dans le Sprint.",
+        "po-dev": "La sélection se fait en discutant avec le Product Owner, mais le Scrum Guide dit bien que ce sont les Developers qui sélectionnent."
+      }
+    },
+    {
+      "id": "dev-06",
+      "text": "Dimensionner (estimer) les éléments du Product Backlog",
+      "answer": "dev",
+      "explanation": "Les Developers qui réaliseront le travail sont responsables du dimensionnement. Le Product Owner peut les influencer en les aidant à comprendre et à choisir des compromis.",
+      "reference": "Product Backlog",
+      "errors": {
+        "po": "Le Product Owner peut aider les Developers à comprendre et à choisir des compromis, mais ce sont eux qui dimensionnent.",
+        "po-dev": "Le Product Owner peut influencer les Developers en les aidant à comprendre les compromis, mais le dimensionnement est de leur seule responsabilité.",
+        "sm": "Le Scrum Master peut faciliter l'estimation, mais il n'estime pas."
+      }
+    },
+    {
+      "id": "dev-07",
+      "text": "Décider comment transformer les éléments du Product Backlog en Increments",
+      "answer": "dev",
+      "explanation": "Le Scrum Guide précise que cela relève de la seule décision des Developers : personne ne leur dit comment faire.",
+      "reference": "Sprint Planning",
+      "errors": {
+        "po": "Le Product Owner décide de ce qui a de la valeur, pas de comment le réaliser : le comment appartient aux seuls Developers.",
+        "team": "Le Scrum Guide est précis : comment transformer les éléments en Increments relève de la seule décision des Developers."
+      }
+    },
+    {
+      "id": "dev-08",
+      "text": "Mener le Daily Scrum",
+      "answer": "dev",
+      "explanation": "Le Daily Scrum est un événement de 15 minutes pour les Developers. Le Scrum Master s'assure qu'il a lieu, mais ce sont les Developers qui le mènent.",
+      "reference": "Daily Scrum",
+      "errors": {
+        "sm": "Le Scrum Master s'assure que le Daily Scrum a lieu, mais c'est un événement des Developers, mené par eux.",
+        "sm-dev": "Le Scrum Master s'assure que le Daily Scrum a lieu, mais il n'est pas tenu de le mener : c'est l'événement des Developers.",
+        "team": "Le Daily Scrum est l'événement des Developers. Le PO et le SM n'y participent comme Developers que s'ils travaillent sur des éléments du Sprint Backlog."
+      }
+    },
+    {
+      "id": "dev-09",
+      "text": "Mettre à jour le Sprint Backlog au fil du Sprint",
+      "answer": "dev",
+      "explanation": "Le Sprint Backlog est un plan par et pour les Developers, mis à jour tout au long du Sprint à mesure qu'ils en apprennent davantage.",
+      "reference": "Sprint Backlog",
+      "errors": {
+        "sm": "Le Scrum Master ne tient pas le Sprint Backlog : il appartient aux Developers.",
+        "po": "Le Product Owner gère le Product Backlog, pas le Sprint Backlog, qui appartient aux Developers."
+      }
+    },
+    {
+      "id": "dev-10",
+      "text": "Découper les éléments sélectionnés en éléments de travail d'une journée ou moins",
+      "answer": "dev",
+      "explanation": "Lors du Sprint Planning, les Developers planifient le travail nécessaire, souvent en découpant les éléments en morceaux d'une journée ou moins.",
+      "reference": "Sprint Planning",
+      "errors": {
+        "po": "Le Product Owner affine le Product Backlog, mais le découpage en tâches pour le Sprint est le travail des Developers."
+      }
+    },
+    {
+      "id": "team-01",
+      "text": "Définir le Sprint Goal",
+      "answer": "team",
+      "explanation": "Lors du Sprint Planning, toute la Scrum Team collabore pour définir le Sprint Goal.",
+      "reference": "Sprint Planning",
+      "errors": {
+        "po": "Le Product Owner propose comment augmenter la valeur, mais c'est toute la Scrum Team qui définit le Sprint Goal.",
+        "dev": "Les Developers s'engagent sur le Sprint Goal, mais c'est toute la Scrum Team qui le définit.",
+        "po-dev": "Le Scrum Guide dit « toute la Scrum Team » : le Scrum Master participe aussi à la définition du Sprint Goal."
+      }
+    },
+    {
+      "id": "team-02",
+      "text": "Créer une Definition of Done adaptée au produit lorsque l'organisation n'en fournit pas",
+      "answer": "team",
+      "explanation": "Si la Definition of Done n'est pas un standard de l'organisation, la Scrum Team doit en créer une adaptée au produit.",
+      "reference": "Increment",
+      "errors": {
+        "dev": "Les Developers doivent respecter la Definition of Done, mais c'est la Scrum Team qui la crée si l'organisation n'en a pas.",
+        "po": "Le Product Owner ne décide pas seul de la Definition of Done : c'est la Scrum Team qui la crée.",
+        "sm": "Le Scrum Master ne fixe pas la Definition of Done : c'est la Scrum Team qui la crée."
+      }
+    },
+    {
+      "id": "team-03",
+      "text": "Identifier, en Sprint Retrospective, les changements les plus utiles pour améliorer son efficacité",
+      "answer": "team",
+      "explanation": "Lors de la Sprint Retrospective, la Scrum Team identifie les changements les plus utiles pour améliorer son efficacité.",
+      "reference": "Sprint Retrospective",
+      "errors": {
+        "sm": "Le Scrum Master est redevable de l'efficacité de l'équipe et s'assure que la rétrospective a lieu, mais c'est la Scrum Team qui identifie les améliorations.",
+        "sm-dev": "Le Product Owner fait aussi partie de la Scrum Team et participe à la Sprint Retrospective."
+      }
+    },
+    {
+      "id": "team-04",
+      "text": "Être redevable (accountable) de la création d'un Increment utile et de valeur à chaque Sprint",
+      "answer": "team",
+      "explanation": "Le Scrum Guide l'écrit explicitement : toute la Scrum Team en est redevable.",
+      "reference": "Scrum Team",
+      "errors": {
+        "dev": "Les Developers créent les Increments, mais la redevabilité d'un Increment de valeur à chaque Sprint est celle de toute la Scrum Team.",
+        "po": "Le Product Owner maximise la valeur du produit, mais c'est toute la Scrum Team qui est redevable d'un Increment de valeur à chaque Sprint."
+      }
+    },
+    {
+      "id": "team-05",
+      "text": "Décider en interne qui fait quoi, quand et comment",
+      "answer": "team",
+      "explanation": "Les Scrum Teams sont auto-gérées : elles décident en interne qui fait quoi, quand et comment.",
+      "reference": "Scrum Team",
+      "errors": {
+        "sm": "Le Scrum Master coache l'auto-gestion, mais il ne décide pas qui fait quoi.",
+        "po": "Le Product Owner décide de ce qui a le plus de valeur, pas de qui fait quoi : la Scrum Team est auto-gérée.",
+        "trap": "Ce n'est pas un piège : c'est la définition de l'auto-gestion de la Scrum Team dans le Scrum Guide."
+      }
+    },
+    {
+      "id": "team-06",
+      "text": "Prendre en charge toutes les activités liées au produit : collaboration avec les parties prenantes, vérification, maintenance, exploitation, expérimentation, recherche et développement",
+      "answer": "team",
+      "explanation": "Le Scrum Guide énumère ces activités et les confie à la Scrum Team.",
+      "reference": "Scrum Team",
+      "errors": {
+        "dev": "Les Developers en réalisent une grande partie, mais le Scrum Guide confie toutes les activités liées au produit à la Scrum Team.",
+        "trap": "Ce n'est pas un piège : le Scrum Guide confie explicitement toutes ces activités à la Scrum Team."
+      }
+    },
+    {
+      "id": "team-07",
+      "text": "Présenter aux parties prenantes clés les résultats du travail en Sprint Review",
+      "answer": "team",
+      "explanation": "Lors de la Sprint Review, la Scrum Team présente les résultats de son travail aux parties prenantes clés.",
+      "reference": "Sprint Review",
+      "errors": {
+        "po": "Le Product Owner n'est pas le seul à présenter : c'est la Scrum Team qui présente les résultats de son travail.",
+        "dev": "Les Developers ne sont pas les seuls à présenter : c'est la Scrum Team qui présente les résultats de son travail."
+      }
+    },
+    {
+      "id": "team-08",
+      "text": "Mettre en pratique les valeurs Scrum : engagement, focus, ouverture, respect et courage",
+      "answer": "team",
+      "explanation": "Le Scrum Guide dit que la réussite de Scrum dépend de la capacité des personnes à mettre en pratique ces valeurs, et que les membres de la Scrum Team les apprennent et les explorent.",
+      "reference": "Valeurs Scrum",
+      "errors": {
+        "sm": "Le Scrum Master peut aider à les faire vivre, mais tous les membres de la Scrum Team mettent en pratique les valeurs Scrum."
+      }
+    },
+    {
+      "id": "team-09",
+      "text": "Inviter d'autres personnes au Sprint Planning pour obtenir des conseils",
+      "answer": "team",
+      "explanation": "Le Scrum Guide précise que la Scrum Team peut inviter d'autres personnes au Sprint Planning pour obtenir des conseils.",
+      "reference": "Sprint Planning",
+      "errors": {
+        "sm": "Le Scrum Master peut faciliter, mais c'est la Scrum Team qui peut inviter d'autres personnes au Sprint Planning.",
+        "po": "Le Product Owner n'est pas le seul à pouvoir inviter : c'est la Scrum Team.",
+        "trap": "Ce n'est pas un piège : la Scrum Team peut inviter d'autres personnes au Sprint Planning pour obtenir des conseils."
+      }
+    },
+    {
+      "id": "podev-01",
+      "text": "Affiner le Product Backlog : découper les éléments et les préciser",
+      "answer": "po-dev",
+      "explanation": "Le Product Owner porte le Product Backlog, et les Developers qui réaliseront le travail en dimensionnent les éléments. L'affinage est une activité continue qui les réunit.",
+      "reference": "Product Backlog",
+      "errors": {
+        "po": "Le Product Owner porte le Product Backlog, mais il n'affine pas seul : les Developers y participent, notamment en dimensionnant les éléments.",
+        "dev": "Les Developers dimensionnent les éléments, mais le Product Owner reste redevable du Product Backlog et participe à son affinage.",
+        "team": "L'affinage réunit surtout le Product Owner et les Developers. Le Scrum Master peut le faciliter, mais il n'en est pas un acteur."
+      }
+    },
+    {
+      "id": "podev-02",
+      "text": "Clarifier et renégocier le périmètre du Sprint au fur et à mesure qu'on en apprend davantage",
+      "answer": "po-dev",
+      "explanation": "Le Scrum Guide prévoit que le périmètre peut être clarifié et renégocié avec le Product Owner au fil du Sprint, sans mettre en danger le Sprint Goal.",
+      "reference": "Le Sprint",
+      "errors": {
+        "po": "Le Product Owner ne renégocie pas seul : il le fait avec les Developers, qui portent le Sprint Backlog.",
+        "dev": "Les Developers ne modifient pas seuls le périmètre : la renégociation se fait avec le Product Owner.",
+        "trap": "Ce n'est pas un piège : le Scrum Guide autorise à clarifier et renégocier le périmètre, tant que le Sprint Goal n'est pas mis en danger."
+      }
+    },
+    {
+      "id": "podev-03",
+      "text": "S'assurer que les éléments du Product Backlog sélectionnés sont bien compris avant de s'engager sur le Sprint",
+      "answer": "po-dev",
+      "explanation": "En Sprint Planning, le Product Owner s'assure que les participants sont prêts à discuter des éléments les plus importants, et les Developers sélectionnent ce qu'ils comprennent et peuvent réaliser.",
+      "reference": "Sprint Planning",
+      "errors": {
+        "po": "Le Product Owner prépare et explique, mais les Developers doivent aussi comprendre ce qu'ils sélectionnent : la compréhension est partagée.",
+        "dev": "Les Developers sélectionnent, mais le Product Owner est là pour clarifier les éléments : la compréhension est partagée."
+      }
+    },
+    {
+      "id": "trap-01",
+      "text": "Assigner les tâches aux Developers",
+      "answer": "trap",
+      "explanation": "Personne n'assigne les tâches dans Scrum : la Scrum Team est auto-gérée et décide en interne qui fait quoi.",
+      "reference": "Scrum Team",
+      "errors": {
+        "sm": "Le Scrum Master n'est pas un chef de projet : il coache l'auto-gestion, il n'assigne pas de tâches.",
+        "po": "Le Product Owner décide de ce qui a de la valeur, pas de qui fait quoi.",
+        "dev": "Les Developers choisissent eux-mêmes leur travail : on ne parle pas d'assigner des tâches."
+      }
+    },
+    {
+      "id": "trap-02",
+      "text": "Valider ou corriger les estimations des Developers",
+      "answer": "trap",
+      "explanation": "Les Developers qui réalisent le travail sont responsables du dimensionnement. Personne ne valide ni ne corrige leurs estimations.",
+      "reference": "Product Backlog",
+      "errors": {
+        "po": "Le Product Owner peut aider à comprendre les compromis, mais il ne valide ni ne corrige les estimations.",
+        "sm": "Le Scrum Master peut faciliter l'estimation, mais il ne valide pas les estimations."
+      }
+    },
+    {
+      "id": "trap-03",
+      "text": "Rédiger le compte rendu du Daily Scrum pour le management",
+      "answer": "trap",
+      "explanation": "Le Daily Scrum sert aux Developers à inspecter leurs progrès vers le Sprint Goal et à adapter leur plan. Ce n'est pas une réunion de reporting.",
+      "reference": "Daily Scrum",
+      "errors": {
+        "sm": "Le Scrum Master n'est pas le secrétaire de l'équipe : le Daily Scrum n'est pas une réunion de reporting."
+      }
+    },
+    {
+      "id": "trap-04",
+      "text": "Calculer la vélocité individuelle de chaque développeur",
+      "answer": "trap",
+      "explanation": "Le Scrum Guide ne parle pas de vélocité, et la redevabilité est collective. Mesurer chaque développeur va à l'encontre de l'auto-gestion.",
+      "reference": "Scrum Team",
+      "errors": {
+        "sm": "Le Scrum Master ne mesure pas la performance individuelle : il est redevable de l'efficacité de toute l'équipe."
+      }
+    },
+    {
+      "id": "trap-05",
+      "text": "Organiser un Sprint de stabilisation pour finir les tests avant une livraison",
+      "answer": "trap",
+      "explanation": "Chaque Sprint doit produire au moins un Increment utilisable qui respecte la Definition of Done. Un « Sprint de stabilisation » révèle un travail qui n'était pas vraiment terminé.",
+      "reference": "Increment",
+      "errors": {
+        "dev": "Les Developers respectent la Definition of Done à chaque Sprint : il n'y a pas de Sprint réservé à la finition."
+      }
+    },
+    {
+      "id": "trap-06",
+      "text": "Prolonger le Sprint de quelques jours pour terminer le travail en cours",
+      "answer": "trap",
+      "explanation": "Les Sprints ont une durée fixe : un nouveau Sprint commence dès la fin du précédent. Le travail non terminé retourne dans le Product Backlog.",
+      "reference": "Le Sprint",
+      "errors": {
+        "po": "Le Product Owner peut annuler un Sprint, mais personne ne peut le prolonger.",
+        "sm": "Le Scrum Master veille au respect des timebox : il ne peut pas prolonger un Sprint."
+      }
+    },
+    {
+      "id": "trap-07",
+      "text": "Animer le Daily Scrum en demandant à chaque développeur de rendre compte de son avancement",
+      "answer": "trap",
+      "explanation": "Le Daily Scrum est l'événement des Developers, pour adapter leur plan vers le Sprint Goal. Ce n'est pas un tour de compte rendu devant un animateur.",
+      "reference": "Daily Scrum",
+      "errors": {
+        "sm": "Le Scrum Master s'assure que le Daily Scrum a lieu, mais il ne le transforme pas en point de reporting.",
+        "dev": "Les Developers mènent bien le Daily Scrum, mais pour adapter leur plan, pas pour rendre compte à quelqu'un."
+      }
+    },
+    {
+      "id": "trap-08",
+      "text": "Évaluer la performance individuelle des membres de l'équipe",
+      "answer": "trap",
+      "explanation": "Aucune accountability Scrum ne prévoit d'évaluer les individus. La Scrum Team ne comporte ni sous-équipes ni hiérarchie.",
+      "reference": "Scrum Team",
+      "errors": {
+        "sm": "Le Scrum Master n'est pas un manager hiérarchique : il sert l'équipe, il ne l'évalue pas.",
+        "po": "Le Product Owner n'est pas le supérieur hiérarchique des Developers."
+      }
+    },
+    {
+      "id": "trap-09",
+      "text": "Approuver le Sprint Backlog avant le début du Sprint",
+      "answer": "trap",
+      "explanation": "Le Sprint Backlog est le plan des Developers, par et pour eux. Personne ne l'approuve.",
+      "reference": "Sprint Backlog",
+      "errors": {
+        "po": "Le Product Owner discute avec les Developers en Sprint Planning, mais il n'approuve pas leur plan.",
+        "sm": "Le Scrum Master n'approuve pas le Sprint Backlog : il appartient aux Developers."
+      }
+    },
+    {
+      "id": "trap-10",
+      "text": "Envoyer un rapport d'avancement hebdomadaire à la direction",
+      "answer": "trap",
+      "explanation": "Scrum assure la transparence par ses artefacts et la Sprint Review, pas par un reporting hebdomadaire.",
+      "reference": "Sprint Review",
+      "errors": {
+        "sm": "Le Scrum Master n'est pas un chef de projet qui fait du reporting.",
+        "po": "Le Product Owner rend le Product Backlog transparent et travaille avec les parties prenantes, mais il n'y a pas de rapport hebdomadaire dans Scrum."
+      }
+    },
+    {
+      "id": "trap-11",
+      "text": "Être le chef de projet de la Scrum Team",
+      "answer": "trap",
+      "explanation": "La Scrum Team ne comporte ni sous-équipes ni hiérarchie. Le Scrum Guide ne prévoit pas de chef de projet.",
+      "reference": "Scrum Team",
+      "errors": {
+        "sm": "Le Scrum Master est un vrai leader, au service de l'équipe et de l'organisation, mais ce n'est pas un chef de projet.",
+        "po": "Le Product Owner décide du produit, mais il ne dirige pas l'équipe."
+      }
+    },
+    {
+      "id": "trap-12",
+      "text": "Ajouter au Sprint Backlog, en cours de Sprint, une demande urgente d'un manager",
+      "answer": "trap",
+      "explanation": "Le Sprint Backlog appartient aux Developers, et aucun changement ne doit mettre en danger le Sprint Goal. Une demande extérieure passe par le Product Owner et le Product Backlog.",
+      "reference": "Le Sprint",
+      "errors": {
+        "po": "Le Product Owner peut ordonner la demande dans le Product Backlog, mais il n'impose rien dans le Sprint Backlog.",
+        "dev": "Les Developers gèrent le Sprint Backlog, mais une demande extérieure passe d'abord par le Product Owner, sans mettre en danger le Sprint Goal."
+      }
+    },
+    {
+      "id": "trap-13",
+      "text": "Garantir que tous les éléments du Sprint Backlog seront terminés à la fin du Sprint",
+      "answer": "trap",
+      "explanation": "Les Developers s'engagent sur le Sprint Goal, pas sur la totalité des éléments. Le périmètre peut être renégocié au fil du Sprint.",
+      "reference": "Sprint Backlog",
+      "errors": {
+        "dev": "Les Developers s'engagent sur le Sprint Goal, pas sur chaque élément du Sprint Backlog.",
+        "sm": "Le Scrum Master ne garantit pas le contenu du Sprint : l'engagement porte sur le Sprint Goal."
+      }
+    },
+    {
+      "id": "trap-14",
+      "text": "Accepter ou refuser formellement chaque élément livré pendant la Sprint Review",
+      "answer": "trap",
+      "explanation": "La Sprint Review est une session de travail pour inspecter le résultat et adapter la suite, pas une recette formelle. Un élément est terminé dès qu'il respecte la Definition of Done.",
+      "reference": "Sprint Review",
+      "errors": {
+        "po": "Le Scrum Guide 2020 ne prévoit pas d'acceptation formelle par le Product Owner : un élément est terminé dès qu'il respecte la Definition of Done."
+      }
+    }
+  ]
+}

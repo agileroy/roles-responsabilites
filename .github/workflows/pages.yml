@@ -25,8 +25,30 @@ jobs:
           node-version: 22
       - run: npm test
 
-  deploy:
+  rules:
     needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Publier les règles de la Realtime Database
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT" ]; then
+            echo "::warning::Secret FIREBASE_SERVICE_ACCOUNT absent : règles non publiées (à publier à la main dans la console Firebase)."
+            exit 0
+          fi
+          key="$RUNNER_TEMP/firebase-sa.json"
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$key"
+          GOOGLE_APPLICATION_CREDENTIALS="$key" npx --yes firebase-tools@15 deploy --only database --non-interactive
+          rm -f "$key"
+
+  deploy:
+    needs: [test, rules]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:

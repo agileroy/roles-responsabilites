@@ -8,10 +8,15 @@ const rules = JSON.parse(await readFile(new URL('../database.rules.json', import
 const game = rules.rolesGame;
 const room = game.rooms.$code;
 
-test('la branche rolesGame existe à côté des autres outils', () => {
-  for (const branch of ['room', 'skillMatrix', 'wheelOfChance', 'movingMotivators', 'rolesGame']) assert.ok(rules[branch], branch);
+test('projet dédié : le fichier ne contient que la branche rolesGame, tout le reste est fermé', () => {
+  assert.deepEqual(Object.keys(rules).sort(), ['.read', '.write', 'rolesGame']);
   assert.equal(rules['.read'], false);
   assert.equal(rules['.write'], false);
+});
+
+test('firebase.json déploie ce fichier de règles', async () => {
+  const config = JSON.parse(await readFile(new URL('../firebase.json', import.meta.url), 'utf8'));
+  assert.deepEqual(config, { database: { rules: 'database.rules.json' } });
 });
 
 test('les régions acceptées par les règles sont celles du jeu', () => {

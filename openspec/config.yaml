@@ -15,9 +15,9 @@ context: |
   les participants (10 au maximum) rejoignent depuis leur téléphone avec un code de salle ou un QR code,
   jouent chacun leur tour, et tout le monde voit le choix du joueur actif et la correction de chaque carte.
   Hébergement : site statique sur GitHub Pages (https://agileroy.github.io/roles-responsabilites/), sans serveur à maintenir.
-  Temps réel : Firebase Realtime Database (offre gratuite, connexion anonyme), projet partagé avec
-  poker-planning, matrice-competences, wheel-of-chance et moving-motivators : database.rules.json doit rester
-  identique dans les cinq dépôts ; ce jeu n'utilise que la branche `rolesGame`.
+  Temps réel : Firebase Realtime Database (offre gratuite, connexion anonyme), dans un projet Firebase dédié au
+  jeu (roles-responsabilites-vleroy, aucun autre outil ne l'utilise) ; database.rules.json ne contient que la
+  branche `rolesGame` et est publié automatiquement par GitHub Actions après les tests (secret FIREBASE_SERVICE_ACCOUNT).
   Aucun autre service tiers. N'utiliser que HTTPS (port 443), pas de connexion directe entre navigateurs (WebRTC).
   Le VPN de l'entreprise (proxy Zscaler) bloque GitHub Pages et Firebase : le jeu se joue hors VPN,
   et les participants bloqués rejoignent depuis leur téléphone via le QR code.

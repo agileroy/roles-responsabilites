@@ -48,7 +48,7 @@ Site statique (HTML/CSS/JavaScript, sans build) publié sur GitHub Pages ; l'ét
 - `site/js/memory-db.js` : base en mémoire de même interface, pour les tests de parcours et le **mode démo** (`?demo` dans l'adresse : les onglets d'un même navigateur partagent une partie, sans Firebase) ;
 - `site/js/venn.js` : diagramme de Venn en SVG ; `site/js/ui.js` : interface ; `site/js/app.js` : point d'entrée ;
 - `site/vendor/` : générateur de QR code `qrcode-generator` 1.4.4 (licence MIT) ;
-- `database.rules.json` : règles de sécurité de la base, **partagées** avec [poker-planning](https://github.com/agileroy/poker-planning), [matrice-competences](https://github.com/agileroy/matrice-competences), [wheel-of-chance](https://github.com/agileroy/wheel-of-chance) et [moving-motivators](https://github.com/agileroy/moving-motivators) : garder ce fichier identique dans les cinq dépôts, et le publier dans la console Firebase après chaque modification.
+- `database.rules.json` : règles de sécurité de la base, limitées à la branche `rolesGame`, dans le projet Firebase propre au jeu (`roles-responsabilites-vleroy`, désigné par `firebase.json` et `.firebaserc`). Elles sont publiées automatiquement à chaque push sur `main`, après les tests, par le job `rules` du workflow (Firebase CLI avec le compte de service du secret `FIREBASE_SERVICE_ACCOUNT`) ; sans ce secret, le job est sauté avec un avertissement et les règles sont à publier à la main dans la console Firebase.
 
 ## Développement
 
@@ -58,7 +58,7 @@ npm run cartes                                    # régénère docs/cartes.md
 python3 -m http.server 8765 --directory site      # puis http://localhost:8765/?demo
 ```
 
-Chaque push sur `main` lance les tests puis publie `site/` sur GitHub Pages ; un test en échec bloque la publication.
+Chaque push sur `main` lance les tests, publie les règles Firebase puis publie `site/` sur GitHub Pages ; un test en échec bloque les deux publications.
 
 ## Méthode
 

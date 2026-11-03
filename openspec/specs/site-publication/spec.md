@@ -1,7 +1,7 @@
 # Site Publication Specification
 
 ## Purpose
-Publication sur GitHub Pages, interface (langue, appareils, thème), connexion au service temps réel, règles de sécurité partagées et encart dans la boîte à outils.
+Publication sur GitHub Pages, interface (langue, appareils, thème), connexion au service temps réel, projet Firebase dédié et règles de sécurité déployées automatiquement, et encart dans la boîte à outils.
 
 ## Requirements
 
@@ -29,14 +29,6 @@ Le site SHALL n'utiliser que des connexions HTTPS (port 443) vers Firebase. Si l
 - **WHEN** sa connexion est coupée puis rétablie
 - **THEN** le message de connexion perdue s'affiche pendant la coupure, puis la partie se met à jour
 
-### Requirement: Règles de sécurité partagées
-Les règles de sécurité SHALL être versionnées dans `database.rules.json` et identiques dans les cinq dépôts qui partagent la base (`roles-responsabilites`, `poker-planning`, `matrice-competences`, `wheel-of-chance`, `moving-motivators`). Ce jeu MUST n'écrire et ne lire que sous la branche `rolesGame`, et l'ajout de cette branche MUST NOT modifier les règles des autres outils. Les règles MUST imposer : seul le formateur d'une salle modifie ses réglages, lance la partie, fait avancer les tours et retire des participants ; un participant n'écrit que sa propre fiche ; seul le joueur actif place la carte du tour, avec une région valide ; une salle n'est supprimée que par son formateur, ou par n'importe qui au-delà de 24 heures.
-
-#### Scenario: Écriture hors de sa salle
-- **GIVEN** Marc, participant de la salle « KZTR »
-- **WHEN** son navigateur tente de modifier les réglages de la salle
-- **THEN** la base refuse l'écriture
-
 ### Requirement: Encart dans la boîte à outils
 La page https://agileroy.github.io/outils/ SHALL comporter une nouvelle section « En formation », décrite comme « Jeux ludiques pour les formations Scrum », contenant une carte « Rôles et responsabilités » avec une courte description, des étiquettes et un lien « Ouvrir » vers le jeu, sur le même modèle que les cartes existantes. Le compteur d'outils en bas de page SHALL être mis à jour.
 
@@ -44,3 +36,32 @@ La page https://agileroy.github.io/outils/ SHALL comporter une nouvelle section 
 - **GIVEN** la page de la boîte à outils
 - **WHEN** l'utilisateur clique sur la carte « Rôles et responsabilités »
 - **THEN** le jeu s'ouvre dans un nouvel onglet
+
+### Requirement: Projet Firebase dédié
+Le jeu SHALL utiliser un projet Firebase qui lui est propre, qu'aucun autre outil n'utilise. `database.rules.json` SHALL ne contenir que la branche `rolesGame`, et tout le reste de la base SHALL être fermé en lecture comme en écriture.
+
+#### Scenario: Fichier commun recopié par erreur
+- **GIVEN** un `database.rules.json` qui contient aussi la branche d'un autre outil
+- **WHEN** les tests s'exécutent
+- **THEN** un test échoue et ni les règles ni le site ne sont publiés
+
+### Requirement: Règles de sécurité du jeu
+Ce jeu MUST n'écrire et ne lire que sous la branche `rolesGame`. 
+
+#### Scenario: Écriture hors de sa salle
+- **GIVEN** Marc, participant de la salle « KZTR »
+- **WHEN** son navigateur tente de modifier les réglages de la salle
+- **THEN** la base refuse l'écriture
+
+### Requirement: Déploiement automatique des règles
+À chaque push sur `main`, après la réussite des tests, GitHub Actions SHALL publier `database.rules.json` dans le projet Firebase du jeu, avec un compte de service gardé en secret (`FIREBASE_SERVICE_ACCOUNT`), puis seulement publier le site. Si un test échoue, les règles MUST NOT être publiées. Sans secret, le déploiement des règles SHALL être sauté avec un avertissement, sans empêcher la publication du site.
+
+#### Scenario: Règles modifiées
+- **GIVEN** un push sur `main` qui modifie `database.rules.json` et dont les tests réussissent
+- **WHEN** le workflow s'exécute
+- **THEN** les nouvelles règles sont actives dans le projet du jeu, sans action dans la console
+
+#### Scenario: Secret absent
+- **GIVEN** un dépôt sans secret `FIREBASE_SERVICE_ACCOUNT`
+- **WHEN** le workflow s'exécute sur `main`
+- **THEN** le job des règles signale qu'il est sauté et le site est publié quand même

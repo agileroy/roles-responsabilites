@@ -1,11 +1,11 @@
-// Configuration web du projet Firebase (publique par nature : la sécurité repose
-// sur database.rules.json, la connexion anonyme et les domaines autorisés).
+// Configuration web du projet Firebase dédié au jeu « Rôles et responsabilités » (publique par nature :
+// la sécurité repose sur database.rules.json, la connexion anonyme et les domaines autorisés).
 export const firebaseConfig = {
-  apiKey: 'AIzaSyCpyzj6hUBitcD-xzLglLZMWuY2kVB_Cgc',
-  authDomain: 'poker-planning-vleroy.firebaseapp.com',
-  databaseURL: 'https://poker-planning-vleroy-default-rtdb.europe-west1.firebasedatabase.app',
-  projectId: 'poker-planning-vleroy',
-  storageBucket: 'poker-planning-vleroy.firebasestorage.app',
-  messagingSenderId: '999561926520',
-  appId: '1:999561926520:web:5d34c607595a32177a9a8d',
+  apiKey: 'AIzaSyBHgaQdJ2ZHzXa7XJXabLNAQZRTFMPdUBc',
+  authDomain: 'roles-responsabilites-vleroy.firebaseapp.com',
+  databaseURL: 'https://roles-responsabilites-vleroy-default-rtdb.europe-west1.firebasedatabase.app',
+  projectId: 'roles-responsabilites-vleroy',
+  storageBucket: 'roles-responsabilites-vleroy.firebasestorage.app',
+  messagingSenderId: '9850197977',
+  appId: '1:9850197977:web:ae16abcb746ebb4f5a6bc8',
 };
